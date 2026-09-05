@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-100 text-slate-900 antialiased dark:bg-navy-900 dark:text-slate-100 selection:bg-sky-500 selection:text-white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Smooth scrolling and safe bottom spacing for mobile browsers */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 24px);
+}
