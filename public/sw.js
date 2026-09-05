@@ -1,10 +1,10 @@
 const CACHE_NAME = 'gui-ar-cache-v2';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.svg',
-  '/icon-512.svg'
+  '/gui-ar/',
+  '/gui-ar/index.html',
+  '/gui-ar/manifest.json',
+  '/gui-ar/icon-192.svg',
+  '/gui-ar/icon-512.svg'
 ];
 
 self.addEventListener('install', (event) => {
@@ -34,7 +34,7 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  // Navigation requests: network-first, fallback to cache, then /index.html
+  // Navigation requests: network-first, fallback to the cached app shell
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
@@ -48,7 +48,7 @@ self.addEventListener('fetch', (event) => {
         .catch(() => {
           return caches.match(event.request).then((cachedResponse) => {
             if (cachedResponse) return cachedResponse;
-            return caches.match('/index.html');
+            return caches.match('/gui-ar/');
           });
         })
     );
@@ -71,7 +71,7 @@ self.addEventListener('fetch', (event) => {
         })
         .catch(() => {
           if (cachedResponse) return cachedResponse;
-          return caches.match('/');
+          return caches.match('/gui-ar/');
         });
       if (cachedResponse) return cachedResponse;
       return networkFetch;
