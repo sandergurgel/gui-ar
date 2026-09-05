@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Compass, AlertTriangle, ArrowRight, ArrowLeft, CheckCircle, Stethoscope, Droplets } from 'lucide-react';
+import { X, Compass, AlertTriangle, ArrowRight, ArrowLeft, CheckCircle, Stethoscope, Droplets, HeartPulse, Zap, ShieldCheck, Eye, Wind, CheckCircle2, RotateCcw } from 'lucide-react';
 import { useClinical } from '../../context/ClinicalContext';
 import { runTriage } from '../../engines/triageEngine';
 import { TriageAnswers, TriageResult } from '../../types/clinical';
@@ -58,9 +58,7 @@ export function TriageModal() {
   const handleStep2 = (hasShock: boolean) => {
     const updated = { ...answers, hasShockOrInstability: hasShock };
     setAnswers(updated);
-    if (hasShock) {
-      setCondition('isShock', true);
-    }
+    setCondition('isShock', hasShock);
     setCurrentStep(3);
   };
 
@@ -165,15 +163,17 @@ export function TriageModal() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <button
                   onClick={() => handleStep1(true)}
-                  className="p-3.5 bg-emergency hover:bg-red-700 text-white font-bold rounded-xl shadow-sm text-center active:scale-95 transition-all"
+                  className="p-3.5 bg-emergency hover:bg-red-700 text-white font-bold rounded-xl shadow-sm text-center btn-3d transition-all flex items-center justify-center space-x-2"
                 >
-                  SIM — Parada ou Peri-Parada (CRASH)
+                  <AlertTriangle className="w-4 h-4" aria-hidden="true" />
+                  <span>SIM — Parada ou Peri-Parada (CRASH)</span>
                 </button>
                 <button
                   onClick={() => handleStep1(false)}
-                  className="p-3.5 bg-navy-600 hover:bg-navy-500 text-white font-bold rounded-xl shadow-sm text-center active:scale-95 transition-all"
+                  className="p-3.5 bg-navy-600 hover:bg-navy-500 text-white font-bold rounded-xl shadow-sm text-center btn-3d transition-all flex items-center justify-center space-x-2"
                 >
-                  NÃO — Paciente com Pulso e Estável para Preparo
+                  <HeartPulse className="w-4 h-4" aria-hidden="true" />
+                  <span>NÃO — Paciente com Pulso e Estável para Preparo</span>
                 </button>
               </div>
             </div>
@@ -197,7 +197,7 @@ export function TriageModal() {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setIsPushDoseModalOpen(true)}
-                  className="text-xs text-amber-600 dark:text-amber-400 font-semibold underline flex items-center space-x-1"
+                  className="text-xs text-amber-600 dark:text-amber-400 font-semibold underline flex items-center space-x-1 min-h-[48px] py-2 px-1"
                 >
                   <Droplets className="w-3.5 h-3.5" />
                   <span>Ver receita de Noradrenalina Push-Dose</span>
@@ -207,15 +207,17 @@ export function TriageModal() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <button
                   onClick={() => handleStep2(true)}
-                  className="p-3.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl shadow-sm text-center active:scale-95 transition-all"
+                  className="p-3.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl shadow-sm text-center btn-3d transition-all flex items-center justify-center space-x-2"
                 >
-                  SIM — Paciente com Choque / PAS &lt; 90
+                  <Zap className="w-4 h-4" aria-hidden="true" />
+                  <span>SIM — Paciente com Choque / PAS &lt; 90</span>
                 </button>
                 <button
                   onClick={() => handleStep2(false)}
-                  className="p-3.5 bg-navy-600 hover:bg-navy-500 text-white font-bold rounded-xl shadow-sm text-center active:scale-95 transition-all"
+                  className="p-3.5 bg-navy-600 hover:bg-navy-500 text-white font-bold rounded-xl shadow-sm text-center btn-3d transition-all flex items-center justify-center space-x-2"
                 >
-                  NÃO — Normotenso / Hemodinâmica Estável
+                  <ShieldCheck className="w-4 h-4" aria-hidden="true" />
+                  <span>NÃO — Normotenso / Hemodinâmica Estável</span>
                 </button>
               </div>
 
@@ -247,7 +249,7 @@ export function TriageModal() {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setIsLemonModalOpen(true)}
-                  className="text-xs text-sky-600 dark:text-sky-400 font-semibold underline flex items-center space-x-1"
+                  className="text-xs text-sky-600 dark:text-sky-400 font-semibold underline flex items-center space-x-1 min-h-[48px] py-2 px-1"
                 >
                   <Stethoscope className="w-3.5 h-3.5" />
                   <span>Checar critérios do Escore LEMON</span>
@@ -262,24 +264,27 @@ export function TriageModal() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <button
                       onClick={() => handleStep3(true, true)}
-                      className="p-2.5 bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold rounded-lg transition-colors"
+                      className="p-2.5 bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold rounded-lg transition-colors min-h-[48px] flex items-center justify-center space-x-2 btn-3d"
                     >
-                      SIM: Equipe capacitada para Intubação Acordado (AWAKE)
+                      <Eye className="w-4 h-4" aria-hidden="true" />
+                      <span>SIM: Equipe capacitada para Intubação Acordado (AWAKE)</span>
                     </button>
                     <button
                       onClick={() => handleStep3(true, false)}
-                      className="p-2.5 bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold rounded-lg transition-colors"
+                      className="p-2.5 bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold rounded-lg transition-colors min-h-[48px] flex items-center justify-center space-x-2 btn-3d"
                     >
-                      SIM: Equipe sem experiência em Awake (DSI / KOBE)
+                      <Wind className="w-4 h-4" aria-hidden="true" />
+                      <span>SIM: Equipe sem experiência em Awake (DSI / KOBE)</span>
                     </button>
                   </div>
                 </div>
 
                 <button
                   onClick={() => handleStep3(false)}
-                  className="w-full p-3.5 bg-navy-600 hover:bg-navy-500 text-white font-bold rounded-xl shadow-sm text-center transition-colors"
+                  className="w-full p-3.5 bg-navy-600 hover:bg-navy-500 text-white font-bold rounded-xl shadow-sm text-center transition-colors flex items-center justify-center space-x-2 btn-3d"
                 >
-                  NÃO — Sem Preditores de VAD Anatômica Grave
+                  <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
+                  <span>NÃO — Sem Preditores de VAD Anatômica Grave</span>
                 </button>
               </div>
 
@@ -311,15 +316,17 @@ export function TriageModal() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <button
                   onClick={() => handleStep4(true)}
-                  className="p-3.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl shadow-sm text-center active:scale-95 transition-all"
+                  className="p-3.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl shadow-sm text-center btn-3d transition-all flex items-center justify-center space-x-2"
                 >
-                  SIM — Hipoxêmico ou Agitado (DSI)
+                  <Wind className="w-4 h-4" aria-hidden="true" />
+                  <span>SIM — Hipoxêmico ou Agitado (DSI)</span>
                 </button>
                 <button
                   onClick={() => handleStep4(false)}
-                  className="p-3.5 bg-navy-600 hover:bg-navy-500 text-white font-bold rounded-xl shadow-sm text-center active:scale-95 transition-all"
+                  className="p-3.5 bg-navy-600 hover:bg-navy-500 text-white font-bold rounded-xl shadow-sm text-center btn-3d transition-all flex items-center justify-center space-x-2"
                 >
-                  NÃO — Pré-Oxigenação Adequada (SRI Padrão)
+                  <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
+                  <span>NÃO — Pré-Oxigenação Adequada (SRI Padrão)</span>
                 </button>
               </div>
 
@@ -367,7 +374,7 @@ export function TriageModal() {
               {/* Botão de Ação */}
               <button
                 onClick={handleSelectRecommendedTrack}
-                className="w-full py-3.5 px-4 bg-navy-600 hover:bg-navy-500 text-white font-extrabold text-sm sm:text-base rounded-xl shadow-lg shadow-navy-600/30 flex items-center justify-center space-x-2 active:scale-95 transition-all"
+                className="w-full py-3.5 px-4 bg-navy-600 hover:bg-navy-500 text-white font-extrabold text-sm sm:text-base rounded-xl shadow-lg shadow-navy-600/30 flex items-center justify-center space-x-2 btn-3d transition-all"
               >
                 <span>Acessar {triageResult.recommendedTrack} Agora</span>
                 <ArrowRight className="w-5 h-5" />
@@ -375,9 +382,10 @@ export function TriageModal() {
 
               <button
                 onClick={() => setCurrentStep(1)}
-                className="w-full min-h-[48px] text-center text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 py-2 rounded-xl focus-visible:ring-2 focus-visible:ring-sky-400"
+                className="w-full min-h-[48px] text-center text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 py-2 rounded-xl focus-visible:ring-2 focus-visible:ring-sky-400 flex items-center justify-center space-x-2"
               >
-                Refazer Triagem
+                <RotateCcw className="w-4 h-4" aria-hidden="true" />
+                <span>Refazer Triagem</span>
               </button>
 
             </div>

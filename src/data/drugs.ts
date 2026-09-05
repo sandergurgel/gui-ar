@@ -70,6 +70,21 @@ export const DRUGS_DATABASE: DrugDefinition[] = [
     notes: 'Início de ação mais lento que etomidato. Pode causar depressão miocárdica e hipotensão.'
   },
   {
+    id: 'fentanil',
+    name: 'Fentanil',
+    commercialNames: 'Fentanila',
+    category: 'adjuvant',
+    concentrationMgPerMl: 0.05,
+    ampoulePresentation: 'Ampola 2 mL (100 mcg = 50 mcg/mL)',
+    standardDoseMgPerKg: 0.002,
+    standardDoseRangeText: '1 a 3 mcg/kg IV lento',
+    onsetSeconds: '30 a 60s',
+    durationMinutes: '30 a 60 min (dose unica)',
+    indications: 'Adjunto de inducao no TCE: atenua a resposta hipertensiva a laringoscopia preservando a pressao de perfusao cerebral. Analgesia de procedural.',
+    contraindications: ['Hipersensibilidade conhecida', 'Bradipneia/apneia nao ventilada'],
+    notes: 'Atenua resposta hemodinamica a laringoscopia. Bradicardia e rigidez toracica em bolus rapido: infundir em 30-60 s.'
+  },
+  {
     id: 'rocuronio',
     name: 'Rocurônio',
     commercialNames: 'Esmeron',

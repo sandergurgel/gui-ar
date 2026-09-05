@@ -1,5 +1,13 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { ClinicalConditions, LemonScoreState, TrackType } from '../types/clinical';
+import {
+  isValidTab,
+  isValidTrack,
+  sanitizeChecklist,
+  sanitizeConditions,
+  sanitizeLemon,
+  sanitizeWeight,
+} from '../utils/stateValidation';
 
 export type ActiveTab = 'checklist' | 'pharma' | 'execution' | 'post';
 
@@ -68,7 +76,9 @@ export function ClinicalProvider({ children }: { children: ReactNode }) {
   const [weightKg, setWeightKgState] = useState<number>(() => {
     try {
       const saved = localStorage.getItem(`${STORAGE_KEY}_weight`);
-      return saved ? JSON.parse(saved) : 70;
+      if (!saved) return 70;
+      const sanitized = sanitizeWeight(JSON.parse(saved));
+      return sanitized ?? 70;
     } catch {
       return 70;
     }
@@ -77,7 +87,8 @@ export function ClinicalProvider({ children }: { children: ReactNode }) {
   const [conditions, setConditions] = useState<ClinicalConditions>(() => {
     try {
       const saved = localStorage.getItem(`${STORAGE_KEY}_conditions`);
-      return saved ? JSON.parse(saved) : defaultConditions;
+      if (!saved) return defaultConditions;
+      return sanitizeConditions(JSON.parse(saved));
     } catch {
       return defaultConditions;
     }
@@ -86,7 +97,7 @@ export function ClinicalProvider({ children }: { children: ReactNode }) {
   const [currentTrack, setCurrentTrackState] = useState<TrackType | null>(() => {
     try {
       const saved = localStorage.getItem(`${STORAGE_KEY}_track`);
-      return saved ? (saved as TrackType) : null;
+      return saved && isValidTrack(saved) ? saved : null;
     } catch {
       return null;
     }
@@ -95,7 +106,7 @@ export function ClinicalProvider({ children }: { children: ReactNode }) {
   const [activeTab, setActiveTabState] = useState<ActiveTab>(() => {
     try {
       const saved = localStorage.getItem(`${STORAGE_KEY}_tab`);
-      return (saved as ActiveTab) || 'checklist';
+      return saved && isValidTab(saved) ? saved : 'checklist';
     } catch {
       return 'checklist';
     }
@@ -104,7 +115,8 @@ export function ClinicalProvider({ children }: { children: ReactNode }) {
   const [checklistChecked, setChecklistChecked] = useState<Record<string, boolean>>(() => {
     try {
       const saved = localStorage.getItem(`${STORAGE_KEY}_checklist`);
-      return saved ? JSON.parse(saved) : {};
+      if (!saved) return {};
+      return sanitizeChecklist(JSON.parse(saved));
     } catch {
       return {};
     }
@@ -113,7 +125,8 @@ export function ClinicalProvider({ children }: { children: ReactNode }) {
   const [lemonState, setLemonState] = useState<LemonScoreState>(() => {
     try {
       const saved = localStorage.getItem(`${STORAGE_KEY}_lemon`);
-      return saved ? JSON.parse(saved) : defaultLemon;
+      if (!saved) return defaultLemon;
+      return sanitizeLemon(JSON.parse(saved));
     } catch {
       return defaultLemon;
     }
@@ -138,6 +151,7 @@ export function ClinicalProvider({ children }: { children: ReactNode }) {
 
   // Persist weight
   const setWeightKg = (w: number) => {
+    if (Number.isFinite(w) === false) return;
     const val = Math.max(10, Math.min(250, w));
     setWeightKgState(val);
     try {

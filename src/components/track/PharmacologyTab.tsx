@@ -17,6 +17,7 @@ export function PharmacologyTab() {
 
   const sedatives = calculatedDoses.filter(d => d.category === 'sedative');
   const paralytics = calculatedDoses.filter(d => d.category === 'paralytic');
+  const adjuvants = calculatedDoses.filter(d => d.category === 'adjuvant');
 
   return (
     <div className="space-y-4 sm:space-y-5">
@@ -38,7 +39,10 @@ export function PharmacologyTab() {
             <input
               type="number"
               value={weightKg}
-              onChange={e => setWeightKg(Number(e.target.value))}
+              onChange={e => {
+                if (e.target.value === '') return;
+                setWeightKg(Number(e.target.value));
+              }}
               min={10}
               max={250}
               aria-label="Peso em kg"
@@ -232,6 +236,83 @@ export function PharmacologyTab() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {paralytics.map(drug => (
+              <div
+                key={drug.drugId}
+                className={`p-4 rounded-2xl border transition-all flex flex-col justify-between shadow-sm ${
+                  drug.isContraindicated
+                    ? 'bg-red-50/70 dark:bg-red-950/20 border-red-300 dark:border-red-900'
+                    : drug.isRecommended
+                    ? 'bg-sky-50/60 dark:bg-navy-800 border-sky-400 dark:border-sky-500 ring-1 ring-sky-400'
+                    : 'bg-white dark:bg-navy-800 border-slate-200 dark:border-navy-700'
+                }`}
+              >
+                <div>
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <h4 className="font-black text-base text-slate-900 dark:text-white leading-tight">
+                        {drug.name}
+                      </h4>
+                      <p className="text-xs text-slate-500 mt-0.5">{drug.presentationText}</p>
+                    </div>
+
+                    {drug.isContraindicated ? (
+                      <span className="text-xs uppercase font-extrabold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-950 text-emergency flex items-center space-x-0.5 shrink-0">
+                        <ShieldBan className="w-3 h-3" />
+                        <span>Contraindicado</span>
+                      </span>
+                    ) : drug.isRecommended ? (
+                      <span className="text-xs uppercase font-extrabold px-2 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950 text-navy-600 dark:text-sky-300 flex items-center space-x-0.5 shrink-0">
+                        <CheckCircle2 className="w-3 h-3" />
+                        <span>1ª Escolha</span>
+                      </span>
+                    ) : null}
+                  </div>
+
+                  {/* Calculation Box */}
+                  {!drug.isContraindicated ? (
+                    <div className="my-3 p-3 rounded-xl bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 flex items-center justify-around text-center">
+                      <div>
+                        <span className="text-xs uppercase font-semibold text-slate-500 block">Dose (mg)</span>
+                        <span className="text-xl font-black text-navy-600 dark:text-sky-400">
+                          {drug.doseMgText}
+                        </span>
+                      </div>
+                      <div className="h-8 w-px bg-slate-200 dark:bg-navy-700" />
+                      <div>
+                        <span className="text-xs uppercase font-semibold text-slate-500 block">Volume na Ampola</span>
+                        <span className="text-xl font-black text-slate-900 dark:text-white">
+                          {drug.volumeMlText}
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="my-3 p-2.5 bg-red-100 dark:bg-red-950/60 border border-red-300 dark:border-red-900 rounded-xl text-xs text-emergency font-medium leading-relaxed">
+                      {drug.contraindicationReason}
+                    </div>
+                  )}
+                </div>
+
+                {drug.clinicalNote && !drug.isContraindicated && (
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed bg-white/60 dark:bg-navy-900/40 p-2.5 rounded-xl border border-slate-100 dark:border-navy-800 flex items-start gap-1.5">
+                    <Info className="w-4 h-4 shrink-0 mt-0.5 text-sky-500" aria-hidden="true" /><span>{drug.clinicalNote}</span>
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 5. ADJUVANTES DA INDUCAO */}
+      {adjuvants.length > 0 && (
+        <div className="space-y-3 pt-2">
+          <h3 className="text-sm font-extrabold text-navy-700 dark:text-sky-300 flex items-center space-x-1.5">
+            <Info className="w-4 h-4" />
+            <span>Adjuvantes da Inducao ({weightKg} kg)</span>
+          </h3>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {adjuvants.map(drug => (
               <div
                 key={drug.drugId}
                 className={`p-4 rounded-2xl border transition-all flex flex-col justify-between shadow-sm ${

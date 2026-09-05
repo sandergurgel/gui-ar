@@ -54,11 +54,11 @@ export function Header() {
               <span className="text-xl sm:text-2xl font-black tracking-tight text-white">
                 Gui<span className="text-sky-400">-Ar</span>
               </span>
-              <span className="text-xs font-bold tracking-wide px-1.5 py-0.5 rounded bg-sky-500/30 text-sky-200 border border-sky-400/30">
+              <span className="text-xs font-bold tracking-wide px-1.5 py-0.5 rounded bg-sky-500/30 text-sky-200 border border-sky-400/30 hidden sm:inline-block">
                 mHealth
               </span>
             </div>
-            <span className="text-xs text-sky-200 font-medium leading-none">
+            <span className="text-xs text-sky-200 font-medium leading-none hidden sm:block">
               Apoio à Decisão em Via Aérea
             </span>
           </div>
@@ -92,10 +92,11 @@ export function Header() {
           <button
             onClick={() => setIsSosModalOpen(true)}
             aria-label="Abrir plano de falha de emergência"
-            className="flex items-center space-x-1.5 min-h-[44px] px-4 py-2.5 bg-emergency hover:bg-red-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-red-900/40 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-white"
+            className="flex items-center space-x-1.5 min-h-[48px] px-4 py-2.5 bg-emergency hover:bg-red-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-red-900/40 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-white btn-3d"
           >
             <AlertTriangle className="w-4 h-4" />
-            <span className="tracking-wide uppercase">SOS Falha</span>
+            <span className="tracking-wide uppercase hidden sm:inline">SOS Falha</span>
+            <span className="sr-only">SOS Falha: abrir plano de resgate da via aérea</span>
           </button>
 
         </div>

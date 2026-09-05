@@ -70,4 +70,24 @@ describe('drugCalculator engine', () => {
     expect(rocuronio?.doseMgText).toBe('84 mg');
     expect(rocuronio?.volumeMlText).toBe('8.4 mL');
   });
+
+  describe('TCE', () => {
+    it('recommends Fentanil, contraindicates Cetamina and recommends Propofol in TBI', () => {
+      const tbiConditions: ClinicalConditions = {
+        ...defaultConditions,
+        isTBI: true,
+      };
+
+      const fentanil = calculateDrugDose('fentanil', 70, tbiConditions, 'SRI');
+      expect(fentanil.isRecommended).toBe(true);
+      expect(fentanil.doseMg).toBeCloseTo(0.14, 2);
+      expect(fentanil.volumeMl).toBeCloseTo(2.8, 1);
+
+      const cetamina = calculateDrugDose('cetamina', 70, tbiConditions, 'SRI');
+      expect(cetamina.isContraindicated).toBe(true);
+
+      const propofol = calculateDrugDose('propofol', 70, tbiConditions, 'SRI');
+      expect(propofol.isRecommended).toBe(true);
+    });
+  });
 });

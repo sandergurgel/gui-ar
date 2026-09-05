@@ -53,3 +53,15 @@
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom, 24px);
 }
+
+@layer components {
+  .btn-3d {
+    box-shadow: 0 4px 0 0 rgb(0 0 0 / 0.22), 0 6px 14px 0 rgb(0 0 0 / 0.15);
+    transition: transform 80ms ease, box-shadow 80ms ease;
+    will-change: transform;
+  }
+  .btn-3d:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 0 rgb(0 0 0 / 0.22), 0 2px 5px 0 rgb(0 0 0 / 0.12);
+  }
+}

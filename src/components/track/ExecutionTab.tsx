@@ -131,7 +131,7 @@ export function ExecutionTab() {
         <button
           onClick={() => setIsSosModalOpen(true)}
           aria-label="Abrir plano de resgate A a D"
-          className="w-full sm:w-auto min-h-[56px] px-5 py-3.5 bg-emergency hover:bg-red-700 text-white font-extrabold text-sm rounded-2xl flex items-center justify-center space-x-1.5 shadow-sm active:scale-95 transition-all shrink-0 focus-visible:ring-2 focus-visible:ring-white"
+          className="w-full sm:w-auto min-h-[56px] px-5 py-3.5 bg-emergency hover:bg-red-700 text-white font-extrabold text-sm rounded-2xl flex items-center justify-center space-x-1.5 shadow-sm active:scale-95 transition-all shrink-0 focus-visible:ring-2 focus-visible:ring-white btn-3d"
         >
           <span>Abrir resgate (A a D)</span>
           <ChevronRight className="w-5 h-5" aria-hidden="true" />

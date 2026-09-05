@@ -62,6 +62,22 @@ export function calculateDrugDose(
     }
   }
 
+  // TCE / Neuroprotecao
+  if (conditions.isTBI) {
+    if (drug.id === 'fentanil') {
+      isRecommended = true;
+      clinicalNote = 'Adjunto de escolha no TCE: atenua a resposta hipertensiva a laringoscopia mantendo a pressao de perfusao cerebral. 1 a 3 mcg/kg IV lento.';
+    }
+    if (drug.id === 'cetamina') {
+      isContraindicated = true;
+      contraindicationReason = 'CONTRAINDICADO RELATIVO: TCE / hipertensao intracraniana — pode elevar a PIC. Preferir Etomidato ou Propofol com Fentanil.';
+    }
+    if (drug.id === 'propofol') {
+      isRecommended = true;
+      clinicalNote = 'Neuroprotetor no TCE: reduz CMRO2 e mantem PPC. Titrar devagar para nao derrubar a PAS.';
+    }
+  }
+
   // Standard recommendations if none set
   if (!isRecommended && !isContraindicated) {
     if (track === 'SRI' && (drug.id === 'etomidato' || drug.id === 'rocuronio')) {
@@ -69,8 +85,9 @@ export function calculateDrugDose(
     }
   }
 
-  const doseMg = Math.round(dosePerKg * weight * 10) / 10;
-  const volumeMl = Math.round((doseMg / drug.concentrationMgPerMl) * 10) / 10;
+  const roundTo = (v: number, d: number) => Math.round(v * 10 ** d) / 10 ** d;
+  const doseMg = roundTo(dosePerKg * weight, dosePerKg * weight < 1 ? 2 : 1);
+  const volumeMl = roundTo(doseMg / drug.concentrationMgPerMl, doseMg / drug.concentrationMgPerMl < 1 ? 2 : 1);
 
   return {
     drugId: drug.id,

@@ -46,7 +46,7 @@ export function Dashboard() {
           <button
             onClick={() => setIsTriageModalOpen(true)}
             aria-label="Iniciar triagem guiada de 15 segundos"
-            className="w-full sm:w-auto min-h-[56px] px-6 py-4 bg-sky-400 hover:bg-sky-300 text-navy-950 font-extrabold text-base rounded-2xl shadow-md flex items-center justify-center space-x-2 shrink-0 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-white"
+            className="w-full sm:w-auto min-h-[56px] px-6 py-4 bg-sky-400 hover:bg-sky-300 text-navy-950 font-extrabold text-base rounded-2xl shadow-md flex items-center justify-center space-x-2 shrink-0 btn-3d transition-all focus-visible:ring-2 focus-visible:ring-white"
           >
             <Compass className="w-5 h-5 text-navy-950" />
             <span>Iniciar — 15 segundos</span>
@@ -79,7 +79,10 @@ export function Dashboard() {
             <input
               type="number"
               value={weightKg}
-              onChange={e => setWeightKg(Number(e.target.value))}
+              onChange={e => {
+                if (e.target.value === '') return;
+                setWeightKg(Number(e.target.value));
+              }}
               min={10}
               max={250}
               aria-label="Peso em kg para cálculo das doses"
@@ -157,7 +160,7 @@ export function Dashboard() {
           <button
             onClick={() => handleSelectTrack('CRASH')}
             aria-label="Abrir trilha CRASH para parada ou peri-parada"
-            className="text-left p-5 bg-white dark:bg-navy-800 border-2 border-red-200 dark:border-red-900/50 hover:border-red-500 rounded-3xl shadow-sm hover:shadow-md transition-all active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-red-400 min-h-[88px]"
+            className="text-left p-5 bg-white dark:bg-navy-800 border-2 border-red-200 dark:border-red-900/50 hover:border-red-500 rounded-3xl shadow-sm hover:shadow-md transition-all btn-3d focus-visible:ring-2 focus-visible:ring-red-400 min-h-[88px]"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="w-11 h-11 rounded-2xl bg-red-100 dark:bg-red-950/80 text-red-700 dark:text-red-300 flex items-center justify-center shrink-0">
@@ -178,7 +181,7 @@ export function Dashboard() {
           <button
             onClick={() => handleSelectTrack('SRI')}
             aria-label="Abrir trilha SRI sequência rápida"
-            className="text-left p-5 bg-navy-900 dark:bg-navy-800 border-2 border-navy-700 hover:border-sky-400 rounded-3xl shadow-md transition-all active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-sky-400 min-h-[88px]"
+            className="text-left p-5 bg-navy-900 dark:bg-navy-800 border-2 border-navy-700 hover:border-sky-400 rounded-3xl shadow-md transition-all btn-3d focus-visible:ring-2 focus-visible:ring-sky-400 min-h-[88px]"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="w-11 h-11 rounded-2xl bg-sky-400/20 text-sky-300 flex items-center justify-center shrink-0">
@@ -199,7 +202,7 @@ export function Dashboard() {
           <button
             onClick={() => handleSelectTrack('DSI')}
             aria-label="Abrir trilha DSI KOBE para hipoxemia ou agitação"
-            className="text-left p-5 bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 hover:border-amber-400 rounded-3xl shadow-sm hover:shadow-md transition-all active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-amber-400 min-h-[88px]"
+            className="text-left p-5 bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 hover:border-amber-400 rounded-3xl shadow-sm hover:shadow-md transition-all btn-3d focus-visible:ring-2 focus-visible:ring-amber-400 min-h-[88px]"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="w-11 h-11 rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 flex items-center justify-center shrink-0">
@@ -220,7 +223,7 @@ export function Dashboard() {
           <button
             onClick={() => handleSelectTrack('AWAKE')}
             aria-label="Abrir trilha Awake para via aérea difícil anatômica"
-            className="text-left p-5 bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 hover:border-teal-400 rounded-3xl shadow-sm hover:shadow-md transition-all active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-teal-400 min-h-[88px]"
+            className="text-left p-5 bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 hover:border-teal-400 rounded-3xl shadow-sm hover:shadow-md transition-all btn-3d focus-visible:ring-2 focus-visible:ring-teal-400 min-h-[88px]"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="w-11 h-11 rounded-2xl bg-teal-100 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 flex items-center justify-center shrink-0">

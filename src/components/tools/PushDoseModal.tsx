@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { X, Activity, Droplets, AlertTriangle } from 'lucide-react';
+import { X, Activity, Droplets, AlertTriangle, Check } from 'lucide-react';
 import { useClinical } from '../../context/ClinicalContext';
 
 export function PushDoseModal() {
@@ -92,9 +92,10 @@ export function PushDoseModal() {
         <div className="bg-slate-100 dark:bg-navy-800 px-4 py-3 flex justify-end border-t border-slate-200 dark:border-navy-700">
           <button
             onClick={() => setIsPushDoseModalOpen(false)}
-            className="min-h-[48px] px-5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-bold rounded-2xl shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-amber-400"
+            className="min-h-[48px] px-5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-bold rounded-2xl shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-amber-400 flex items-center justify-center space-x-2"
           >
-            Fechar guia
+            <Check className="w-4 h-4" aria-hidden="true" />
+            <span>Fechar guia</span>
           </button>
         </div>
 

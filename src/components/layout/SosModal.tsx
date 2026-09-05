@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { AlertOctagon, X, PhoneCall, CheckCircle2 } from 'lucide-react';
+import { AlertOctagon, X, PhoneCall, CheckCircle2, Undo2, RefreshCw, LifeBuoy, Wind, Scissors } from 'lucide-react';
 import { useClinical } from '../../context/ClinicalContext';
 
 export function SosModal() {
@@ -45,7 +45,7 @@ export function SosModal() {
           
           <details open className="border border-slate-200 dark:border-navy-700 rounded-2xl p-4 bg-slate-50 dark:bg-navy-800/80">
             <summary className="font-bold text-navy-800 dark:text-sky-300 text-base cursor-pointer min-h-[48px] flex items-center justify-between gap-2 focus-visible:ring-2 focus-visible:ring-sky-400 rounded-xl">
-              Plano A — Otimize a tentativa <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-200 dark:bg-navy-700 text-slate-700 dark:text-slate-300">Máx. 3 tentativas</span>
+              <span className="flex items-center gap-2 min-w-0"><RefreshCw className="w-5 h-5 text-sky-600 dark:text-sky-300 shrink-0" aria-hidden="true" />Plano A — Otimize a tentativa</span> <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-200 dark:bg-navy-700 text-slate-700 dark:text-slate-300 shrink-0">Máx. 3 tentativas</span>
             </summary>
             <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 mb-3">
               Se falhou, não repita igual. Mude algo, com calma:
@@ -61,8 +61,8 @@ export function SosModal() {
           </details>
 
           <details className="border border-amber-300 dark:border-amber-700/60 rounded-2xl p-4 bg-amber-50/50 dark:bg-amber-950/20">
-            <summary className="font-bold text-amber-800 dark:text-amber-300 text-base cursor-pointer min-h-[48px] flex items-center focus-visible:ring-2 focus-visible:ring-amber-400 rounded-xl">
-              Plano B — Dispositivo supraglótico
+            <summary className="font-bold text-amber-800 dark:text-amber-300 text-base cursor-pointer min-h-[48px] flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-amber-400 rounded-xl">
+              <LifeBuoy className="w-5 h-5 text-amber-700 dark:text-amber-300" aria-hidden="true" />Plano B — Dispositivo supraglótico
             </summary>
             <div className="text-sm space-y-1.5 text-slate-700 dark:text-slate-300 mt-2">
               <p>Falhou a laringoscopia? O foco agora é <strong>oxigenar</strong>, não intubar.</p>
@@ -72,8 +72,8 @@ export function SosModal() {
           </details>
 
           <details className="border border-slate-200 dark:border-navy-700 rounded-2xl p-4 bg-white dark:bg-navy-800/60">
-            <summary className="font-bold text-slate-700 dark:text-slate-200 text-base cursor-pointer min-h-[48px] flex items-center focus-visible:ring-2 focus-visible:ring-sky-400 rounded-xl">
-              Plano C — Bolsa-válvula-máscara a 2 pessoas
+            <summary className="font-bold text-slate-700 dark:text-slate-200 text-base cursor-pointer min-h-[48px] flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-sky-400 rounded-xl">
+              <Wind className="w-5 h-5 text-slate-600 dark:text-slate-200" aria-hidden="true" />Plano C — Bolsa-válvula-máscara a 2 pessoas
             </summary>
             <div className="text-sm space-y-1.5 text-slate-600 dark:text-slate-400 mt-2">
               <p>Um segura a máscara com as duas mãos, outro ventila suave com PEEP.</p>
@@ -84,6 +84,7 @@ export function SosModal() {
           <div className="border-2 border-red-500 rounded-2xl p-4 bg-red-50 dark:bg-red-950/40 text-red-900 dark:text-red-100">
             <div className="flex items-center space-x-2 mb-2">
               <PhoneCall className="w-5 h-5 text-red-600" aria-hidden="true" />
+              <Scissors className="w-5 h-5 text-red-600" aria-hidden="true" />
               <span className="font-extrabold text-red-700 dark:text-red-300 text-base">
                 Plano D — Não intubo, não ventilo
               </span>
@@ -111,9 +112,10 @@ export function SosModal() {
         <div className="bg-slate-100 dark:bg-navy-800 px-4 py-3 flex justify-end border-t border-slate-200 dark:border-navy-700">
           <button
             onClick={() => setIsSosModalOpen(false)}
-            className="min-h-[48px] px-5 py-2.5 bg-navy-600 hover:bg-navy-500 text-white text-sm font-bold rounded-2xl transition-colors shadow-sm focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="min-h-[48px] px-5 py-2.5 bg-navy-600 hover:bg-navy-500 text-white text-sm font-bold rounded-2xl transition-colors shadow-sm focus-visible:ring-2 focus-visible:ring-sky-400 flex items-center justify-center space-x-2"
           >
-            Voltar ao passo atual
+            <Undo2 className="w-4 h-4" aria-hidden="true" />
+            <span>Voltar ao passo atual</span>
           </button>
         </div>
 

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { X, Check, Stethoscope, AlertTriangle } from 'lucide-react';
+import { X, Check, Stethoscope, AlertTriangle, RotateCcw } from 'lucide-react';
 import { useClinical } from '../../context/ClinicalContext';
 
 export function LemonModal() {
@@ -148,15 +148,17 @@ export function LemonModal() {
         <div className="bg-slate-100 dark:bg-navy-800 px-4 py-3 flex items-center justify-between gap-2 border-t border-slate-200 dark:border-navy-700">
           <button
             onClick={resetLemon}
-            className="min-h-[48px] px-4 text-sm font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 rounded-xl focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="min-h-[48px] px-4 text-sm font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 rounded-xl focus-visible:ring-2 focus-visible:ring-sky-400 flex items-center justify-center space-x-2"
           >
-            Limpar escore
+            <RotateCcw className="w-4 h-4" aria-hidden="true" />
+            <span>Limpar escore</span>
           </button>
           <button
             onClick={() => setIsLemonModalOpen(false)}
-            className="min-h-[48px] px-5 bg-navy-600 hover:bg-navy-500 text-white text-sm font-bold rounded-2xl shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="min-h-[48px] px-5 bg-navy-600 hover:bg-navy-500 text-white text-sm font-bold rounded-2xl shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-sky-400 flex items-center justify-center space-x-2"
           >
-            Concluir ({lemonScore} pts)
+            <Check className="w-4 h-4" aria-hidden="true" />
+            <span>Concluir ({lemonScore} pts)</span>
           </button>
         </div>
 

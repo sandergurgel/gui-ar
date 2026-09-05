@@ -8,7 +8,8 @@ export function PostIntubationTab() {
   // Mechanical ventilation calculator based on height and sex (persisted)
   const [sex, setSex] = useState<'male' | 'female'>(() => {
     try {
-      return (localStorage.getItem('gui_ar_vent_sex') as 'male' | 'female') || 'male';
+      const saved = localStorage.getItem('gui_ar_vent_sex');
+      return saved === 'female' || saved === 'male' ? saved : 'male';
     } catch {
       return 'male';
     }
@@ -130,7 +131,11 @@ export function PostIntubationTab() {
             <input
               type="number"
               value={heightCm}
-              onChange={e => setHeightCm(Number(e.target.value))}
+              onChange={e => {
+                const v = Number(e.target.value);
+                if (!Number.isFinite(v)) return;
+                setHeightCm(v);
+              }}
               min={130}
               max={220}
               aria-label="Altura em centímetros, entre 130 e 220"
@@ -153,7 +158,8 @@ export function PostIntubationTab() {
           </p>
         )}
 
-        {/* Calculated Ventilator Settings */}
+        {/* Calculated Ventilator Settings (hidden until height input is finite) */}
+        {Number.isFinite(heightCm) ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
           <div className="p-3 bg-sky-50/70 dark:bg-navy-900/60 border border-sky-200 dark:border-navy-700 rounded-xl">
             <span className="text-xs uppercase font-bold text-slate-500 block">Volume Corrente (VC)</span>
@@ -187,6 +193,7 @@ export function PostIntubationTab() {
             <span className="text-xs text-slate-500 block mt-0.5">Titular p/ SpO2 92-96%</span>
           </div>
         </div>
+        ) : null}
       </div>
 
       {/* 3. SEDOANALGESIA CONTÍNUA */}
@@ -206,7 +213,7 @@ export function PostIntubationTab() {
               • Analgesia: Fentanil (50 mcg/mL puro)
             </p>
             <p className="text-slate-600 dark:text-slate-300">
-              Iniciar a 1 a 2 mcg/kg/hora. Exemplo {weightKg} kg: <strong>1,5 a 3 mL/hora</strong> em BIC.
+              Iniciar a 1 a 2 mcg/kg/hora. Exemplo {weightKg} kg: <strong>{((weightKg * 1) / 50).toFixed(1)} a {((weightKg * 2) / 50).toFixed(1)} mL/hora</strong> em BIC.
             </p>
           </div>
 
