@@ -1,0 +1,24 @@
+{
+  "name": "Gui-Ar - Apoio à Decisão em Via Aérea",
+  "short_name": "Gui-Ar",
+  "description": "Tecnologia mHealth de apoio à decisão clínica para manejo da via aérea em salas de urgência e emergência (UEM)",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0B1329",
+  "theme_color": "#1E3A8A",
+  "icons": [
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
