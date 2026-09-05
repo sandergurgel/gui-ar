@@ -67,7 +67,7 @@
 - **URL:** https://sandergurgel.github.io/gui-ar/ (repo público `sandergurgel/gui-ar`)
 - Base path `/gui-ar/` em vite.config, manifest (`start_url`/`scope`/icons), index.html, SW (fallbacks `/gui-ar/`), registro do SW via `import.meta.env.BASE_URL`
 - Workflow Actions (npm ci → build → upload-pages-artifact → deploy-pages), Pages habilitado via API com `build_type=workflow`
-- Commits: `9f636e5` (rollback Sala Calma) → `1256e73` (F1-F3) → `5360c44` (deploy)
+- Commits: `9f636e5` (rollback Sala Calma) → `1256e73` (F1-F3) → `5360c44` (deploy) → `b8ba4a3` (memoria.md)
 - Verificado: app/SW/manifest todos 200; bundle servido = mesmo hash do build local; screenshot confirma renderização correta
 
 ## 4. ESTADO ATUAL
@@ -82,7 +82,7 @@
 - [ ] Teste real no celular: instalar PWA (iOS: Adicionar à Tela de Início / Android: Instalar), testar offline avião ligado
 - [ ] Validação clínica formal do conteúdo TCE/fentanil pelo orientador (Farmacologia nova — revisão bibliográfica antes da tese)
 - [ ] CAAE/ethics e decisão de telemetria (LGPD) — hoje NENHUM dado sai do dispositivo
-- [ ] Commit do MEMORY.md
+- [ ] Commit do MEMORY.md ~~(feito: `b8ba4a3`)~~
 - [ ] Opcional: aprofundar sombra 3D (6-8px) se o teste tátil no celular pedir; modo paisagem/tablet; testes E2E (Playwright) quando estabilizar
 
 ## 6. LIÇÕES DE ORQUESTRAÇÃO (registradas também na skill multi-agent-coding)
