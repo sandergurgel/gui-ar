@@ -1,9 +1,26 @@
+import { useState, useEffect } from 'react';
 import { CheckCircle2, RotateCcw, AlertCircle, ShieldCheck } from 'lucide-react';
 import { useClinical } from '../../context/ClinicalContext';
 import { CHECKLIST_7PS } from '../../data/checklists';
 
 export function ChecklistTab() {
   const { checklistChecked, toggleChecklistItem, resetChecklist } = useClinical();
+  const [armClear, setArmClear] = useState(false);
+
+  useEffect(() => {
+    if (!armClear) return;
+    const t = setTimeout(() => setArmClear(false), 4000);
+    return () => clearTimeout(t);
+  }, [armClear]);
+
+  const handleClear = () => {
+    if (!armClear) {
+      setArmClear(true);
+      return;
+    }
+    setArmClear(false);
+    resetChecklist();
+  };
 
   const totalItems = CHECKLIST_7PS.length;
   const checkedCount = Object.values(checklistChecked).filter(Boolean).length;
@@ -39,12 +56,14 @@ export function ChecklistTab() {
           </div>
 
           <button
-            onClick={resetChecklist}
-            className="text-xs font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 flex items-center space-x-1 p-1.5"
-            title="Limpar checklist"
+            onClick={handleClear}
+            aria-label={armClear ? 'Confirmar limpeza da checklist' : 'Limpar checklist'}
+            aria-live="polite"
+            className={`min-h-[48px] px-3 text-sm font-semibold flex items-center space-x-1.5 rounded-xl focus-visible:ring-2 focus-visible:ring-sky-400 ${armClear ? 'bg-red-600 text-white' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+            title={armClear ? 'Toque de novo para confirmar' : 'Limpar checklist'}
           >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span className="hidden xs:inline">Limpar</span>
+            <RotateCcw className="w-4 h-4" />
+            <span>{armClear ? 'Confirmar?' : 'Limpar'}</span>
           </button>
         </div>
 
@@ -82,48 +101,50 @@ export function ChecklistTab() {
                   const isChecked = Boolean(checklistChecked[item.id]);
 
                   return (
-                    <div
+                    <button
                       key={item.id}
                       onClick={() => toggleChecklistItem(item.id)}
-                      className={`p-3 rounded-xl border cursor-pointer select-none transition-all flex items-start space-x-3 ${
+                      aria-pressed={isChecked}
+                      className={`w-full min-h-[56px] p-3.5 rounded-2xl border text-left transition-all flex items-start space-x-3 focus-visible:ring-2 focus-visible:ring-sky-400 ${
                         isChecked
                           ? 'bg-green-50/70 dark:bg-green-950/20 border-green-300 dark:border-green-800 text-slate-900 dark:text-slate-100'
                           : 'bg-slate-50 dark:bg-navy-900/60 border-slate-200 dark:border-navy-700 hover:border-slate-300'
                       }`}
                     >
                       <div
-                        className={`w-5 h-5 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
+                        className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                           isChecked
                             ? 'bg-success text-white'
                             : 'border-2 border-slate-300 dark:border-navy-600 text-transparent'
                         }`}
+                        aria-hidden="true"
                       >
                         <CheckCircle2 className="w-4 h-4 fill-current" />
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center flex-wrap gap-2">
                           <span
-                            className={`text-xs sm:text-sm font-bold ${
+                            className={`text-sm font-bold ${
                               isChecked
-                                ? 'line-through text-slate-400 dark:text-slate-500'
+                                ? 'line-through text-slate-500 dark:text-slate-400'
                                 : 'text-slate-900 dark:text-white'
                             }`}
                           >
                             {item.label}
                           </span>
                           {item.isCritical && (
-                            <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-red-100 dark:bg-red-950/60 text-emergency flex items-center space-x-0.5">
-                              <AlertCircle className="w-2.5 h-2.5" />
+                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-300 flex items-center space-x-1">
+                              <AlertCircle className="w-3 h-3" aria-hidden="true" />
                               <span>Crítico</span>
                             </span>
                           )}
                         </div>
-                        <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
                           {item.description}
                         </p>
                       </div>
-                    </div>
+                    </button>
                   );
                 })}
               </div>

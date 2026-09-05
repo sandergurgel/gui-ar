@@ -1,4 +1,4 @@
-import { AlertTriangle, Droplets, Info, Sparkles, CheckCircle2, ShieldBan } from 'lucide-react';
+import { AlertTriangle, Droplets, Info, Sparkles, CheckCircle2, ShieldBan, Minus, Plus, Zap, Wind, Brain } from 'lucide-react';
 import { useClinical } from '../../context/ClinicalContext';
 import { getAllCalculatedDoses } from '../../engines/drugCalculator';
 
@@ -12,7 +12,7 @@ export function PharmacologyTab() {
     setIsPushDoseModalOpen
   } = useClinical();
 
-  const weights = [50, 60, 70, 80, 90, 100];
+  const presets = [60, 75, 90];
   const calculatedDoses = getAllCalculatedDoses(weightKg, conditions, currentTrack ?? 'SRI');
 
   const sedatives = calculatedDoses.filter(d => d.category === 'sedative');
@@ -21,87 +21,75 @@ export function PharmacologyTab() {
   return (
     <div className="space-y-4 sm:space-y-5">
       
-      {/* 1. SELETOR DE PESO E CONDIÇÕES */}
-      <div className="bg-white dark:bg-navy-800 p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-navy-700 shadow-sm space-y-3">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            Ajuste de Peso para Cálculo
+      {/* 1. Peso e condições — calmo */}
+      <div className="bg-white dark:bg-navy-800 p-4 rounded-3xl border border-slate-200 dark:border-navy-700 shadow-sm space-y-4">
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-sm font-bold text-slate-700 dark:text-slate-200">
+            Doses para {weightKg} kg
           </span>
-          <div className="flex items-center space-x-1">
-            <span className="text-xs text-slate-400">Peso:</span>
+          <span className="text-xs text-slate-500" aria-live="polite">Ajustamos mg e mL juntos</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button onClick={() => setWeightKg(weightKg - 1)} aria-label="Reduzir peso" className="min-w-[48px] min-h-[48px] rounded-2xl bg-slate-100 dark:bg-navy-700 flex items-center justify-center hover:bg-slate-200 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-sky-400">
+            <Minus className="w-5 h-5" />
+          </button>
+          <div className="flex-1 flex items-center justify-center gap-2 bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 rounded-2xl min-h-[48px]">
             <input
               type="number"
               value={weightKg}
               onChange={e => setWeightKg(Number(e.target.value))}
               min={10}
               max={250}
-              className="w-16 px-2 py-0.5 text-xs font-black text-center border border-sky-400 rounded-lg bg-sky-50 dark:bg-navy-900 text-navy-900 dark:text-sky-200"
+              aria-label="Peso em kg"
+              className="w-20 bg-transparent text-center text-lg font-extrabold tabular-nums focus:outline-none"
             />
-            <span className="text-xs font-bold text-slate-500">kg</span>
+            <span className="text-sm text-slate-500">kg</span>
           </div>
+          <button onClick={() => setWeightKg(weightKg + 1)} aria-label="Aumentar peso" className="min-w-[48px] min-h-[48px] rounded-2xl bg-slate-100 dark:bg-navy-700 flex items-center justify-center hover:bg-slate-200 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-sky-400">
+            <Plus className="w-5 h-5" />
+          </button>
         </div>
-
-        {/* Buttons */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1">
-          {weights.map(w => (
-            <button
-              key={w}
-              onClick={() => setWeightKg(w)}
-              className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all shrink-0 ${
-                weightKg === w
-                  ? 'bg-navy-600 text-white shadow-sm dark:bg-sky-500 dark:text-navy-950'
-                  : 'bg-slate-100 dark:bg-navy-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
-              }`}
-            >
+        <div className="flex gap-2">
+          {presets.map(w => (
+            <button key={w} onClick={() => setWeightKg(w)} className={`flex-1 min-h-[48px] rounded-2xl font-bold text-sm focus-visible:ring-2 focus-visible:ring-sky-400 ${weightKg === w ? 'bg-navy-600 text-white dark:bg-sky-500 dark:text-navy-950' : 'bg-slate-100 dark:bg-navy-700 text-slate-700 dark:text-slate-300'}`}>
               {w} kg
             </button>
           ))}
         </div>
 
-        {/* Tags de Condição Clínica */}
-        <div className="flex items-center flex-wrap gap-1.5 pt-1">
+        {/* Condições sem emoji */}
+        <div className="flex items-center flex-wrap gap-2" role="group" aria-label="Condições clínicas">
           <button
             onClick={() => toggleCondition('isShock')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1 border transition-all ${
-              conditions.isShock
-                ? 'bg-amber-100 dark:bg-amber-950/60 border-amber-400 text-amber-900 dark:text-amber-200 shadow-sm'
-                : 'bg-slate-50 dark:bg-navy-900 border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-400'
-            }`}
+            aria-pressed={conditions.isShock}
+            className={`min-h-[48px] px-3.5 rounded-2xl text-sm font-semibold flex items-center space-x-2 border focus-visible:ring-2 focus-visible:ring-sky-400 ${conditions.isShock ? 'bg-amber-100 dark:bg-amber-950/60 border-amber-400 text-amber-900 dark:text-amber-200' : 'bg-slate-50 dark:bg-navy-900 border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-400'}`}
           >
-            <span>⚡ Choque / Hipotensão</span>
+            <Zap className="w-4 h-4" aria-hidden="true" /><span>Choque</span>
           </button>
 
           <button
             onClick={() => toggleCondition('isBronchospasm')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1 border transition-all ${
-              conditions.isBronchospasm
-                ? 'bg-sky-100 dark:bg-sky-950/60 border-sky-400 text-sky-900 dark:text-sky-200 shadow-sm'
-                : 'bg-slate-50 dark:bg-navy-900 border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-400'
-            }`}
+            aria-pressed={conditions.isBronchospasm}
+            className={`min-h-[48px] px-3.5 rounded-2xl text-sm font-semibold flex items-center space-x-2 border focus-visible:ring-2 focus-visible:ring-sky-400 ${conditions.isBronchospasm ? 'bg-sky-100 dark:bg-sky-950/60 border-sky-400 text-sky-900 dark:text-sky-200' : 'bg-slate-50 dark:bg-navy-900 border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-400'}`}
           >
-            <span>🫁 Broncoespasmo</span>
+            <Wind className="w-4 h-4" aria-hidden="true" /><span>Broncoespasmo</span>
           </button>
 
           <button
             onClick={() => toggleCondition('isTBI')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1 border transition-all ${
-              conditions.isTBI
-                ? 'bg-indigo-100 dark:bg-indigo-950/60 border-indigo-400 text-indigo-900 dark:text-indigo-200 shadow-sm'
-                : 'bg-slate-50 dark:bg-navy-900 border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-400'
-            }`}
+            aria-pressed={conditions.isTBI}
+            className={`min-h-[48px] px-3.5 rounded-2xl text-sm font-semibold flex items-center space-x-2 border focus-visible:ring-2 focus-visible:ring-sky-400 ${conditions.isTBI ? 'bg-indigo-100 dark:bg-indigo-950/60 border-indigo-400 text-indigo-900 dark:text-indigo-200' : 'bg-slate-50 dark:bg-navy-900 border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-400'}`}
           >
-            <span>🧠 TCE / Neuro</span>
+            <Brain className="w-4 h-4" aria-hidden="true" /><span>TCE</span>
           </button>
 
           <button
             onClick={() => toggleCondition('isHyperkalemiaRisk')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1 border transition-all ${
-              conditions.isHyperkalemiaRisk
-                ? 'bg-red-100 dark:bg-red-950/60 border-red-400 text-red-900 dark:text-red-200 shadow-sm'
-                : 'bg-slate-50 dark:bg-navy-900 border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-400'
-            }`}
+            aria-pressed={conditions.isHyperkalemiaRisk}
+            className={`min-h-[48px] px-3.5 rounded-2xl text-sm font-semibold flex items-center space-x-2 border focus-visible:ring-2 focus-visible:ring-sky-400 ${conditions.isHyperkalemiaRisk ? 'bg-red-100 dark:bg-red-950/60 border-red-400 text-red-900 dark:text-red-200' : 'bg-slate-50 dark:bg-navy-900 border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-400'}`}
           >
-            <span>⚠️ Risco de Hipercalemia</span>
+            <AlertTriangle className="w-4 h-4" aria-hidden="true" /><span>Hipercalemia</span>
           </button>
         </div>
 
@@ -153,7 +141,7 @@ export function PharmacologyTab() {
             <div className="p-2.5 bg-white dark:bg-navy-900 rounded-xl border border-teal-100 dark:border-teal-900">
               <p className="font-bold text-slate-900 dark:text-white">2. Sedação Mínima Titulada (Manter Ventilação Espontânea)</p>
               <p>• <strong>Cetamina em microdoses:</strong> 0,2 a 0,5 mg/kg IV lento ({Math.round(weightKg * 0.3)} mg = {((weightKg * 0.3) / 50).toFixed(1)} mL da ampola 50 mg/mL).</p>
-              <p>• <strong>Alerta:</strong> 🛑 <strong>NÃO ADMINISTRAR BLOQUEADOR NEUROMUSCULAR</strong> antes de certificar-se de que a via aérea está garantida e intubada!</p>
+              <p className="flex items-start gap-1.5 mt-1.5 text-amber-800 dark:text-amber-200 font-medium"><AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" /> Não administre bloqueador neuromuscular antes de confirmar a via aérea. Um passo de cada vez.</p>
             </div>
           </div>
         </div>
@@ -184,16 +172,16 @@ export function PharmacologyTab() {
                     <h4 className="font-black text-base text-slate-900 dark:text-white leading-tight">
                       {drug.name}
                     </h4>
-                    <p className="text-[11px] text-slate-400 mt-0.5">{drug.presentationText}</p>
+                    <p className="text-xs text-slate-500 mt-0.5">{drug.presentationText}</p>
                   </div>
 
                   {drug.isContraindicated ? (
-                    <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-950 text-emergency flex items-center space-x-0.5 shrink-0">
+                    <span className="text-xs uppercase font-extrabold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-950 text-emergency flex items-center space-x-0.5 shrink-0">
                       <ShieldBan className="w-3 h-3" />
                       <span>Contraindicado</span>
                     </span>
                   ) : drug.isRecommended ? (
-                    <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950 text-navy-600 dark:text-sky-300 flex items-center space-x-0.5 shrink-0">
+                    <span className="text-xs uppercase font-extrabold px-2 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950 text-navy-600 dark:text-sky-300 flex items-center space-x-0.5 shrink-0">
                       <CheckCircle2 className="w-3 h-3" />
                       <span>1ª Escolha</span>
                     </span>
@@ -204,14 +192,14 @@ export function PharmacologyTab() {
                 {!drug.isContraindicated ? (
                   <div className="my-3 p-3 rounded-xl bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 flex items-center justify-around text-center">
                     <div>
-                      <span className="text-[10px] uppercase font-semibold text-slate-400 block">Dose (mg)</span>
+                      <span className="text-xs uppercase font-semibold text-slate-500 block">Dose (mg)</span>
                       <span className="text-xl font-black text-navy-600 dark:text-sky-400">
                         {drug.doseMgText}
                       </span>
                     </div>
                     <div className="h-8 w-px bg-slate-200 dark:bg-navy-700" />
                     <div>
-                      <span className="text-[10px] uppercase font-semibold text-slate-400 block">Volume na Ampola</span>
+                      <span className="text-xs uppercase font-semibold text-slate-500 block">Volume na Ampola</span>
                       <span className="text-xl font-black text-slate-900 dark:text-white">
                         {drug.volumeMlText}
                       </span>
@@ -225,8 +213,8 @@ export function PharmacologyTab() {
               </div>
 
               {drug.clinicalNote && !drug.isContraindicated && (
-                <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-snug bg-white/60 dark:bg-navy-900/40 p-2 rounded-lg border border-slate-100 dark:border-navy-800">
-                  💡 {drug.clinicalNote}
+                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed bg-white/60 dark:bg-navy-900/40 p-2.5 rounded-xl border border-slate-100 dark:border-navy-800 flex items-start gap-1.5">
+                  <Info className="w-4 h-4 shrink-0 mt-0.5 text-sky-500" aria-hidden="true" /><span>{drug.clinicalNote}</span>
                 </p>
               )}
             </div>
@@ -237,7 +225,7 @@ export function PharmacologyTab() {
       {/* 4. BLOQUEADORES NEUROMUSCULARES (BNMs) */}
       {currentTrack !== 'AWAKE' && (
         <div className="space-y-3 pt-2">
-          <h3 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-navy-600 dark:text-sky-400 flex items-center space-x-1.5">
+          <h3 className="text-sm font-extrabold text-navy-700 dark:text-sky-300 flex items-center space-x-1.5">
             <Info className="w-4 h-4" />
             <span>Bloqueadores Neuromusculares ({weightKg} kg)</span>
           </h3>
@@ -260,16 +248,16 @@ export function PharmacologyTab() {
                       <h4 className="font-black text-base text-slate-900 dark:text-white leading-tight">
                         {drug.name}
                       </h4>
-                      <p className="text-[11px] text-slate-400 mt-0.5">{drug.presentationText}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">{drug.presentationText}</p>
                     </div>
 
                     {drug.isContraindicated ? (
-                      <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-950 text-emergency flex items-center space-x-0.5 shrink-0">
+                      <span className="text-xs uppercase font-extrabold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-950 text-emergency flex items-center space-x-0.5 shrink-0">
                         <ShieldBan className="w-3 h-3" />
                         <span>Contraindicado</span>
                       </span>
                     ) : drug.isRecommended ? (
-                      <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950 text-navy-600 dark:text-sky-300 flex items-center space-x-0.5 shrink-0">
+                      <span className="text-xs uppercase font-extrabold px-2 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950 text-navy-600 dark:text-sky-300 flex items-center space-x-0.5 shrink-0">
                         <CheckCircle2 className="w-3 h-3" />
                         <span>1ª Escolha</span>
                       </span>
@@ -280,14 +268,14 @@ export function PharmacologyTab() {
                   {!drug.isContraindicated ? (
                     <div className="my-3 p-3 rounded-xl bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 flex items-center justify-around text-center">
                       <div>
-                        <span className="text-[10px] uppercase font-semibold text-slate-400 block">Dose (mg)</span>
+                        <span className="text-xs uppercase font-semibold text-slate-500 block">Dose (mg)</span>
                         <span className="text-xl font-black text-navy-600 dark:text-sky-400">
                           {drug.doseMgText}
                         </span>
                       </div>
                       <div className="h-8 w-px bg-slate-200 dark:bg-navy-700" />
                       <div>
-                        <span className="text-[10px] uppercase font-semibold text-slate-400 block">Volume na Ampola</span>
+                        <span className="text-xs uppercase font-semibold text-slate-500 block">Volume na Ampola</span>
                         <span className="text-xl font-black text-slate-900 dark:text-white">
                           {drug.volumeMlText}
                         </span>
@@ -301,8 +289,8 @@ export function PharmacologyTab() {
                 </div>
 
                 {drug.clinicalNote && !drug.isContraindicated && (
-                  <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-snug bg-white/60 dark:bg-navy-900/40 p-2 rounded-lg border border-slate-100 dark:border-navy-800">
-                    💡 {drug.clinicalNote}
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed bg-white/60 dark:bg-navy-900/40 p-2.5 rounded-xl border border-slate-100 dark:border-navy-800 flex items-start gap-1.5">
+                    <Info className="w-4 h-4 shrink-0 mt-0.5 text-sky-500" aria-hidden="true" /><span>{drug.clinicalNote}</span>
                   </p>
                 )}
               </div>

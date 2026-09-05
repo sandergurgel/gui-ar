@@ -1,0 +1,288 @@
+{
+  "components": [
+    {
+      "css": ".ds-btn-primary{background:#38BDF8;color:#060B18;padding:16px 24px;border:none;border-radius:16px;font-weight:800;font-size:16px;display:inline-flex;align-items:center;gap:8px;transition:background .2s,transform .2s}.ds-btn-primary:hover{background:#7DD3FC}.ds-btn-primary:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}.ds-btn-primary:active{transform:scale(.97)}",
+      "description": "CTA primário sky sobre navy. Quando há uma ação.",
+      "html": "<button class=\"ds-btn-primary\">Iniciar — 15 segundos</button>",
+      "kind": "button",
+      "name": "Primary Button",
+      "refersTo": "button-primary"
+    },
+    {
+      "css": ".ds-btn-danger{background:#DC2626;color:#F8FAFC;padding:10px 16px;border:none;border-radius:16px;font-weight:700;font-size:13px;display:inline-flex;align-items:center;gap:6px}.ds-btn-danger:hover{background:#b91c1c}.ds-btn-danger:focus-visible{outline:2px solid #fff;outline-offset:2px}",
+      "description": "Só SOS e Plano D.",
+      "html": "<button class=\"ds-btn-danger\">SOS Falha</button>",
+      "kind": "button",
+      "name": "Danger Button",
+      "refersTo": "button-danger"
+    },
+    {
+      "css": ".ds-card{background:#fff;border:1px solid #E2E8F0;border-radius:24px;padding:20px;box-shadow:0 1px 2px rgba(11,19,41,.06)}.ds-card:focus-within{border-color:#38BDF8}",
+      "description": "Cartão calmo padrão.",
+      "html": "<div class=\"ds-card\">Sobre o paciente</div>",
+      "kind": "card",
+      "name": "Calm Card",
+      "refersTo": "button-primary"
+    },
+    {
+      "css": ".ds-chip{background:#F0F4F8;color:#0B1329;border:1px solid #E2E8F0;border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;min-height:48px}.ds-chip[aria-pressed=\"true\"]{background:#fef3c7;border-color:#D97706;color:#92400e}.ds-chip:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}",
+      "description": "Pill de condição com estado.",
+      "html": "<button class=\"ds-chip\" aria-pressed=\"true\">Choque</button>",
+      "kind": "chip",
+      "name": "Condition Chip",
+      "refersTo": "chip-active"
+    },
+    {
+      "css": ".ds-dose{background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:16px;display:flex;gap:16px;align-items:center}.ds-dose b{font-size:20px;font-variant-numeric:tabular-nums}.ds-dose small{font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:.05em;display:block}",
+      "description": "mg + mL lado a lado.",
+      "html": "<div class=\"ds-dose\"><div><small>Dose</small><b>21 mg</b></div><div><small>Volume</small><b>10.5 mL</b></div></div>",
+      "kind": "custom",
+      "name": "Dose Card",
+      "refersTo": "button-primary"
+    },
+    {
+      "css": ".ds-tabs{display:flex;gap:6px;background:rgba(226,232,240,.8);padding:6px;border-radius:16px}.ds-tab{flex:1;min-height:48px;border:none;border-radius:12px;font-weight:700;font-size:14px;color:#475569}.ds-tab[aria-selected=\"true\"]{background:#fff;color:#1E3A8A;box-shadow:0 1px 2px rgba(0,0,0,.08)}.ds-tab:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}",
+      "description": "Preparo / Doses / Execução / Pós.",
+      "html": "<div class=\"ds-tabs\"><button class=\"ds-tab\" aria-selected=\"true\">Doses</button><button class=\"ds-tab\" aria-selected=\"false\">Preparo</button></div>",
+      "kind": "nav",
+      "name": "Track Tabs",
+      "refersTo": "button-primary"
+    },
+    {
+      "css": ".ds-input{display:flex;gap:8px;align-items:center}.ds-step{min-width:48px;min-height:48px;border:none;border-radius:16px;background:#F0F4F8;font-size:20px}.ds-step:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}.ds-field{flex:1;text-align:center;font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;border:1px solid #E2E8F0;border-radius:16px;min-height:48px}",
+      "description": "Stepper de peso.",
+      "html": "<div class=\"ds-input\"><button class=\"ds-step\">-</button><div class=\"ds-field\">70 kg</div><button class=\"ds-step\">+</button></div>",
+      "kind": "input",
+      "name": "Weight Stepper",
+      "refersTo": "button-primary"
+    }
+  ],
+  "extensions": {
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      }
+    ],
+    "colorMeta": {
+      "emergency": {
+        "canonical": "#DC2626",
+        "displayName": "Emergency",
+        "role": "tertiary",
+        "tonalRamp": [
+          "#450a0a",
+          "#7f1d1d",
+          "#b91c1c",
+          "#DC2626",
+          "#ef4444",
+          "#fca5a5",
+          "#fecaca",
+          "#fef2f2"
+        ]
+      },
+      "ice-50": {
+        "canonical": "#F8FAFC",
+        "displayName": "Ice",
+        "role": "neutral",
+        "tonalRamp": [
+          "#0f172a",
+          "#334155",
+          "#64748b",
+          "#94a3b8",
+          "#cbd5e1",
+          "#e2e8f0",
+          "#f1f5f9",
+          "#F8FAFC"
+        ]
+      },
+      "ice-100": {
+        "canonical": "#F0F4F8",
+        "displayName": "Ice Deep",
+        "role": "neutral",
+        "tonalRamp": [
+          "#0f172a",
+          "#334155",
+          "#64748b",
+          "#94a3b8",
+          "#cbd5e1",
+          "#E2E8F0",
+          "#F0F4F8",
+          "#F8FAFC"
+        ]
+      },
+      "navy-600": {
+        "canonical": "#1E3A8A",
+        "displayName": "Navy 600",
+        "role": "primary",
+        "tonalRamp": [
+          "#060B18",
+          "#0B1329",
+          "#172554",
+          "#1E3A8A",
+          "#1d4ed8",
+          "#3b82f6",
+          "#93c5fd",
+          "#dbeafe"
+        ]
+      },
+      "navy-900": {
+        "canonical": "#0B1329",
+        "displayName": "Navy 900",
+        "role": "primary",
+        "tonalRamp": [
+          "#060B18",
+          "#0B1329",
+          "#0F172A",
+          "#1E293B",
+          "#334155",
+          "#64748b",
+          "#cbd5e1",
+          "#F8FAFC"
+        ]
+      },
+      "navy-950": {
+        "canonical": "#060B18",
+        "displayName": "Navy 950",
+        "role": "neutral",
+        "tonalRamp": [
+          "#060B18",
+          "#0B1329",
+          "#0F172A",
+          "#1E293B",
+          "#334155",
+          "#94a3b8",
+          "#e2e8f0",
+          "#f8fafc"
+        ]
+      },
+      "sky-400": {
+        "canonical": "#38BDF8",
+        "displayName": "Sky 400",
+        "role": "primary",
+        "tonalRamp": [
+          "#082f49",
+          "#0c4a6e",
+          "#0284C7",
+          "#38BDF8",
+          "#7DD3FC",
+          "#bae6fd",
+          "#e0f2fe",
+          "#f0f9ff"
+        ]
+      },
+      "sky-500": {
+        "canonical": "#0284C7",
+        "displayName": "Sky 500",
+        "role": "secondary",
+        "tonalRamp": [
+          "#082f49",
+          "#0c4a6e",
+          "#0284C7",
+          "#38BDF8",
+          "#7DD3FC",
+          "#bae6fd",
+          "#e0f2fe",
+          "#f0f9ff"
+        ]
+      },
+      "success": {
+        "canonical": "#16A34A",
+        "displayName": "Success",
+        "role": "tertiary",
+        "tonalRamp": [
+          "#052e16",
+          "#14532d",
+          "#15803d",
+          "#16A34A",
+          "#22c55e",
+          "#86efac",
+          "#bbf7d0",
+          "#f0fdf4"
+        ]
+      },
+      "warning": {
+        "canonical": "#D97706",
+        "displayName": "Warning",
+        "role": "tertiary",
+        "tonalRamp": [
+          "#451a03",
+          "#78350f",
+          "#b45309",
+          "#D97706",
+          "#f59e0b",
+          "#fcd34d",
+          "#fde68a",
+          "#fffbeb"
+        ]
+      }
+    },
+    "motion": [],
+    "shadows": [
+      {
+        "name": "card",
+        "purpose": "Repouso quase plano.",
+        "value": "0 1px 2px rgba(11,19,41,0.06)"
+      },
+      {
+        "name": "hero",
+        "purpose": "Hero e modal.",
+        "value": "0 20px 40px rgba(11,19,41,0.30)"
+      }
+    ],
+    "typographyMeta": {
+      "body": {
+        "displayName": "Body",
+        "purpose": "Conduta e diluições."
+      },
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero e resultado."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Badges e abas."
+      }
+    }
+  },
+  "generatedAt": "2026-09-05T02:40:00Z",
+  "narrative": {
+    "dos": [
+      "Do reservar vermelho ao CICO e à contraindicação real.",
+      "Do manter o hero navy liso, sem motivo gráfico.",
+      "Do dar 48px, Esc e aria-live a toda decisão crítica.",
+      "Do declarar offline no rodapé."
+    ],
+    "donts": [
+      "Don't usar pulse/bounce fora do CICO.",
+      "Don't trocar Lucide por emoji em conduta clínica.",
+      "Don't empilhar bg-* conflitantes no mesmo banner.",
+      "Don't usar texto de ação abaixo de 12px."
+    ],
+    "keyCharacteristics": [
+      "Calma que opera: hierarquia por tinta, não por ruído.",
+      "Tátil: tudo tocável tem 48px e foco sky visível.",
+      "Sem enfeite: superfícies lisas, dados clínicos em texto tabular."
+    ],
+    "northStar": "Sala Calma",
+    "overview": "Confiança técnica em plantão noturno: navy profundo contém, sky orienta, hero navy liso sem motivo decorativo. Um passo por tela, tipo legível de luva, nenhum grito fora do CICO.",
+    "rules": [
+      {
+        "body": "Vermelho aparece só no CICO e em contraindicação. Em qualquer outra tela, urgência se diz com sky e tipo.",
+        "name": "The Red Silence Rule",
+        "section": "colors"
+      },
+      {
+        "body": "Controles nomeiam a ação. Erros nomeiam problema e saída.",
+        "name": "The One Voice Rule",
+        "section": "typography"
+      },
+      {
+        "body": "Sombra aparece como resposta a estado, nunca como decoração.",
+        "name": "The Flat-By-Calm Rule",
+        "section": "elevation"
+      }
+    ]
+  },
+  "schemaVersion": 2,
+  "title": "Design System: Gui-Ar"
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Compass, AlertTriangle, ArrowRight, ArrowLeft, CheckCircle, Stethoscope, Droplets } from 'lucide-react';
 import { useClinical } from '../../context/ClinicalContext';
 import { runTriage } from '../../engines/triageEngine';
@@ -24,6 +24,15 @@ export function TriageModal() {
   });
 
   const [triageResult, setTriageResult] = useState<TriageResult | null>(null);
+
+  useEffect(() => {
+    if (!isTriageModalOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsTriageModalOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isTriageModalOpen, setIsTriageModalOpen]);
 
   if (!isTriageModalOpen) return null;
 
@@ -91,22 +100,22 @@ export function TriageModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-700 rounded-2xl w-full max-w-lg max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Triagem rápida da via aérea">
+      <div className="bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-700 rounded-3xl w-full max-w-lg max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
         
-        {/* Header */}
-        <div className="bg-navy-600 dark:bg-navy-950 px-4 py-3 text-white flex items-center justify-between border-b border-navy-500/30">
+          {/* Header */}
+          <div className="bg-navy-900 dark:bg-navy-950 px-5 py-4 text-white flex items-center justify-between border-b border-navy-700">
           <div className="flex items-center space-x-2">
-            <Compass className="w-5 h-5 text-sky-400" />
+            <Compass className="w-5 h-5 text-sky-400" aria-hidden="true" />
             <div>
-              <h2 className="font-bold text-base leading-tight">Triagem Rápida da Via Aérea</h2>
-              <p className="text-xs text-sky-200">Classificação Clínica Guiada (&lt; 15 segundos)</p>
+              <h2 className="font-bold text-base leading-tight">Triagem em 15 segundos</h2>
+              <p className="text-sm text-sky-200">Vamos juntos, uma pergunta de cada vez</p>
             </div>
           </div>
           <button
             onClick={handleClose}
-            className="p-1 rounded-full hover:bg-navy-500/50 transition-colors"
-            aria-label="Fechar"
+            aria-label="Fechar triagem"
+            className="min-w-[48px] min-h-[48px] p-2.5 rounded-2xl hover:bg-navy-700 transition-colors focus-visible:ring-2 focus-visible:ring-sky-400"
           >
             <X className="w-5 h-5" />
           </button>
@@ -140,7 +149,7 @@ export function TriageModal() {
           
           {/* STEP 1: PCR / Coma Agônico */}
           {currentStep === 1 && (
-            <div className="space-y-4 animate-in fade-in">
+            <div className="space-y-4">
               <div className="p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-xl">
                 <span className="text-xs font-bold uppercase tracking-wider text-emergency">
                   1. Gravidade Imediata
@@ -172,7 +181,7 @@ export function TriageModal() {
 
           {/* STEP 2: Choque / Instabilidade Hemodinâmica */}
           {currentStep === 2 && (
-            <div className="space-y-4 animate-in fade-in">
+            <div className="space-y-4">
               <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 rounded-xl">
                 <span className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
                   2. Otimização Hemodinâmica
@@ -212,7 +221,7 @@ export function TriageModal() {
 
               <button
                 onClick={() => setCurrentStep(1)}
-                className="text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400 flex items-center space-x-1 mt-2"
+                className="min-h-[48px] px-2 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 flex items-center space-x-1.5 mt-2 rounded-xl focus-visible:ring-2 focus-visible:ring-sky-400"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Voltar para etapa 1</span>
@@ -222,7 +231,7 @@ export function TriageModal() {
 
           {/* STEP 3: VAD Anatômica Prevista & LEMON */}
           {currentStep === 3 && (
-            <div className="space-y-4 animate-in fade-in">
+            <div className="space-y-4">
               <div className="p-3 bg-sky-50 dark:bg-navy-800 border border-sky-200 dark:border-navy-700 rounded-xl">
                 <span className="text-xs font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400">
                   3. Avaliação Anatômica
@@ -276,7 +285,7 @@ export function TriageModal() {
 
               <button
                 onClick={() => setCurrentStep(2)}
-                className="text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400 flex items-center space-x-1"
+                className="min-h-[48px] px-2 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 flex items-center space-x-1.5 rounded-xl focus-visible:ring-2 focus-visible:ring-sky-400"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Voltar para etapa 2</span>
@@ -286,7 +295,7 @@ export function TriageModal() {
 
           {/* STEP 4: Hipoxemia / Agitação */}
           {currentStep === 4 && (
-            <div className="space-y-4 animate-in fade-in">
+            <div className="space-y-4">
               <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 rounded-xl">
                 <span className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
                   4. Oxigenação & Agitação
@@ -316,7 +325,7 @@ export function TriageModal() {
 
               <button
                 onClick={() => setCurrentStep(3)}
-                className="text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400 flex items-center space-x-1"
+                className="min-h-[48px] px-2 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 flex items-center space-x-1.5 rounded-xl focus-visible:ring-2 focus-visible:ring-sky-400"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Voltar para etapa 3</span>
@@ -326,14 +335,14 @@ export function TriageModal() {
 
           {/* STEP 5: RESULT */}
           {currentStep === 5 && triageResult && (
-            <div className="space-y-4 animate-in zoom-in-95">
+            <div className="space-y-4" aria-live="polite">
               
               {/* Card Resultado */}
-              <div className="p-4 rounded-2xl border-2 border-navy-500 dark:border-sky-500 bg-slate-50 dark:bg-navy-800">
-                <div className="flex items-center space-x-2 text-navy-600 dark:text-sky-400 mb-1">
-                  <CheckCircle className="w-5 h-5 text-sky-500" />
-                  <span className="text-xs font-bold uppercase tracking-wider">
-                    Estratégia Recomendada
+              <div className="p-5 rounded-3xl border-2 border-sky-400 dark:border-sky-500 bg-sky-50 dark:bg-navy-800">
+                <div className="flex items-center space-x-2 text-navy-700 dark:text-sky-300 mb-1">
+                  <CheckCircle className="w-5 h-5 text-sky-500" aria-hidden="true" />
+                  <span className="text-sm font-bold">
+                    Você está no caminho certo
                   </span>
                 </div>
 
@@ -366,7 +375,7 @@ export function TriageModal() {
 
               <button
                 onClick={() => setCurrentStep(1)}
-                className="w-full text-center text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400 py-1"
+                className="w-full min-h-[48px] text-center text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 py-2 rounded-xl focus-visible:ring-2 focus-visible:ring-sky-400"
               >
                 Refazer Triagem
               </button>

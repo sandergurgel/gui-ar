@@ -1,4 +1,4 @@
-import { Compass, Flame, Shield, Wind, Eye, Stethoscope, Droplets, CheckSquare, Zap, Activity } from 'lucide-react';
+import { Compass, Flame, Shield, Wind, Eye, Stethoscope, Droplets, CheckSquare, Activity, Minus, Plus, Zap, Brain, AlertTriangle } from 'lucide-react';
 import { useClinical } from '../../context/ClinicalContext';
 import { TrackType } from '../../types/clinical';
 
@@ -19,59 +19,89 @@ export function Dashboard() {
     setCurrentTrack(track);
   };
 
-  const weights = [50, 60, 70, 80, 90, 100];
+  const presets = [60, 75, 90];
+
+  const conditionPills = [
+    { key: 'isShock' as const, label: 'Choque / Hipotensão', icon: Zap, active: 'bg-amber-100 dark:bg-amber-950/60 border-amber-400 text-amber-900 dark:text-amber-200' },
+    { key: 'isBronchospasm' as const, label: 'Broncoespasmo / Asma', icon: Wind, active: 'bg-sky-100 dark:bg-sky-950/60 border-sky-400 text-sky-900 dark:text-sky-200' },
+    { key: 'isTBI' as const, label: 'TCE / Neuroproteção', icon: Brain, active: 'bg-indigo-100 dark:bg-indigo-950/60 border-indigo-400 text-indigo-900 dark:text-indigo-200' },
+    { key: 'isHyperkalemiaRisk' as const, label: 'Risco de hipercalemia', icon: AlertTriangle, active: 'bg-red-100 dark:bg-red-950/60 border-red-400 text-red-900 dark:text-red-200' },
+  ];
 
   return (
-    <div className="max-w-5xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
+    <div className="max-w-5xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-5">
       
-      {/* 1. HERO: Triagem Rápida */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-navy-600 to-navy-500 text-white p-4 sm:p-5 shadow-lg border border-navy-400/30">
-        <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div>
-            <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-sky-400/20 text-sky-200 text-xs font-semibold mb-1.5">
-              <Zap className="w-3.5 h-3.5" />
-              <span>Apoio Decisório em Crise</span>
-            </div>
-            <h2 className="text-xl sm:text-2xl font-black tracking-tight">
-              Triagem Rápida da Via Aérea
+      {/* 1. HERO companhia — um gesto */}
+      <div className="relative overflow-hidden rounded-3xl bg-navy-900 dark:bg-navy-950 text-white p-5 sm:p-7 shadow-xl shadow-navy-900/30 border border-navy-700">
+        <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="max-w-xl">
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight">
+              Triagem da via aérea
             </h2>
-            <p className="text-xs sm:text-sm text-sky-100 max-w-xl mt-0.5">
-              Responda a até 4 perguntas objetivas para definir a melhor conduta entre Crash, SRI, DSI/KOBE ou Awake em menos de 15 segundos.
+            <p className="text-sm sm:text-base text-sky-200 mt-2 leading-relaxed">
+              Em 15 segundos, definimos juntos a conduta. Respire — siga um passo de cada vez.
             </p>
           </div>
 
           <button
             onClick={() => setIsTriageModalOpen(true)}
-            className="w-full sm:w-auto px-5 py-3 bg-sky-400 hover:bg-sky-300 text-navy-950 font-extrabold text-sm rounded-xl shadow-md flex items-center justify-center space-x-2 shrink-0 active:scale-95 transition-all"
+            aria-label="Iniciar triagem guiada de 15 segundos"
+            className="w-full sm:w-auto min-h-[56px] px-6 py-4 bg-sky-400 hover:bg-sky-300 text-navy-950 font-extrabold text-base rounded-2xl shadow-md flex items-center justify-center space-x-2 shrink-0 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-white"
           >
             <Compass className="w-5 h-5 text-navy-950" />
-            <span>Iniciar Triagem</span>
+            <span>Iniciar — 15 segundos</span>
           </button>
         </div>
-
-        {/* Decorative background glow */}
-        <div className="absolute -right-6 -bottom-10 w-40 h-40 bg-sky-400/10 rounded-full blur-2xl pointer-events-none" />
       </div>
 
-      {/* 2. Parâmetros Rápidos do Paciente (Peso & Condições) */}
-      <div className="bg-white dark:bg-navy-800 rounded-2xl p-3.5 sm:p-4 border border-slate-200 dark:border-navy-700 shadow-sm space-y-3">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center space-x-1">
-            <Activity className="w-4 h-4 text-sky-500" />
-            <span>Ajuste Rápido do Paciente</span>
+      {/* 2. Sobre o paciente — stepper calmo */}
+      <div className="bg-white dark:bg-navy-800 rounded-3xl p-4 sm:p-5 border border-slate-200 dark:border-navy-700 shadow-sm space-y-4">
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-sm font-bold text-slate-700 dark:text-slate-200 flex items-center space-x-2">
+            <Activity className="w-4 h-4 text-sky-500" aria-hidden="true" />
+            <span>Sobre o paciente</span>
           </span>
-          <span className="text-xs font-extrabold text-navy-600 dark:text-sky-400">
-            Peso Selecionado: {weightKg} kg
+          <span className="text-sm font-extrabold text-navy-600 dark:text-sky-300 tabular-nums" aria-live="polite">
+            {weightKg} kg · {Object.values(conditions).filter(Boolean).length === 0 ? 'estável' : `${Object.values(conditions).filter(Boolean).length} condição(ões)`}
           </span>
         </div>
 
-        {/* Peso Buttons */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1">
-          {weights.map(w => (
+        {/* Stepper peso */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setWeightKg(weightKg - 1)}
+            aria-label="Reduzir peso em 1 kg"
+            className="min-w-[48px] min-h-[48px] rounded-2xl bg-slate-100 dark:bg-navy-700 text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-200 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-sky-400"
+          >
+            <Minus className="w-5 h-5" />
+          </button>
+          <div className="flex-1 flex items-center justify-center gap-2 bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 rounded-2xl min-h-[48px] px-3">
+            <input
+              type="number"
+              value={weightKg}
+              onChange={e => setWeightKg(Number(e.target.value))}
+              min={10}
+              max={250}
+              aria-label="Peso em kg para cálculo das doses"
+              className="w-20 bg-transparent text-center text-lg font-extrabold text-slate-900 dark:text-white focus:outline-none tabular-nums"
+            />
+            <span className="text-sm text-slate-500">kg</span>
+          </div>
+          <button
+            onClick={() => setWeightKg(weightKg + 1)}
+            aria-label="Aumentar peso em 1 kg"
+            className="min-w-[48px] min-h-[48px] rounded-2xl bg-slate-100 dark:bg-navy-700 text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-200 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-sky-400"
+          >
+            <Plus className="w-5 h-5" />
+          </button>
+        </div>
+        <div className="flex items-center gap-2">
+          {presets.map(w => (
             <button
               key={w}
               onClick={() => setWeightKg(w)}
-              className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all shrink-0 ${
+              aria-label={`Usar peso ${w} kg`}
+              className={`flex-1 min-h-[48px] rounded-2xl font-bold text-sm transition-all focus-visible:ring-2 focus-visible:ring-sky-400 ${
                 weightKg === w
                   ? 'bg-navy-600 text-white shadow-sm dark:bg-sky-500 dark:text-navy-950'
                   : 'bg-slate-100 dark:bg-navy-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
@@ -80,206 +110,184 @@ export function Dashboard() {
               {w} kg
             </button>
           ))}
-          <div className="flex items-center space-x-1 pl-1 shrink-0">
-            <input
-              type="number"
-              value={weightKg}
-              onChange={e => setWeightKg(Number(e.target.value))}
-              min={10}
-              max={250}
-              className="w-16 px-2 py-1 text-xs font-bold text-center border border-slate-300 dark:border-navy-600 rounded-lg bg-white dark:bg-navy-900 text-slate-900 dark:text-white"
-            />
-            <span className="text-[11px] text-slate-400">kg</span>
+        </div>
+        <p className="text-xs text-slate-500 dark:text-slate-400">Peso para cálculo — ajustamos todas as doses em mg e mL. Faixa 10–250 kg; fora dela usamos o limite seguro mais próximo.</p>
+
+        {/* Condições em disclosure — fora do primeiro olhar */}
+        <details className="pt-1">
+          <summary className="min-h-[48px] flex items-center justify-between cursor-pointer rounded-2xl px-1 text-sm font-bold text-slate-700 dark:text-slate-200 focus-visible:ring-2 focus-visible:ring-sky-400">
+            <span>Condições do paciente</span>
+            <span className="text-xs font-bold text-slate-500" aria-live="polite">
+              {Object.values(conditions).filter(Boolean).length === 0 ? 'Nenhuma' : `${Object.values(conditions).filter(Boolean).length} ativa(s)`}
+            </span>
+          </summary>
+          <div className="flex items-center flex-wrap gap-2 pt-2" role="group" aria-label="Condições clínicas">
+          {conditionPills.map(p => {
+            const Icon = p.icon;
+            const on = conditions[p.key];
+            return (
+              <button
+                key={p.key}
+                onClick={() => toggleCondition(p.key)}
+                aria-pressed={on}
+                className={`min-h-[48px] px-3.5 py-2 rounded-2xl text-sm font-semibold flex items-center space-x-2 border transition-all focus-visible:ring-2 focus-visible:ring-sky-400 ${
+                  on ? p.active + ' shadow-sm' : 'bg-slate-50 dark:bg-navy-900 border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-400'
+                }`}
+              >
+                <Icon className="w-4 h-4" aria-hidden="true" />
+                <span>{p.label}</span>
+              </button>
+            );
+          })}
           </div>
-        </div>
-
-        {/* Tags Clínicas */}
-        <div className="flex items-center flex-wrap gap-1.5 pt-1">
-          <button
-            onClick={() => toggleCondition('isShock')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1 border transition-all ${
-              conditions.isShock
-                ? 'bg-amber-100 dark:bg-amber-950/60 border-amber-400 text-amber-900 dark:text-amber-200 shadow-sm'
-                : 'bg-slate-50 dark:bg-navy-900 border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-400'
-            }`}
-          >
-            <span>⚡ Choque / Hipotensão</span>
-          </button>
-
-          <button
-            onClick={() => toggleCondition('isBronchospasm')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1 border transition-all ${
-              conditions.isBronchospasm
-                ? 'bg-sky-100 dark:bg-sky-950/60 border-sky-400 text-sky-900 dark:text-sky-200 shadow-sm'
-                : 'bg-slate-50 dark:bg-navy-900 border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-400'
-            }`}
-          >
-            <span>🫁 Broncoespasmo / Asma</span>
-          </button>
-
-          <button
-            onClick={() => toggleCondition('isTBI')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1 border transition-all ${
-              conditions.isTBI
-                ? 'bg-indigo-100 dark:bg-indigo-950/60 border-indigo-400 text-indigo-900 dark:text-indigo-200 shadow-sm'
-                : 'bg-slate-50 dark:bg-navy-900 border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-400'
-            }`}
-          >
-            <span>🧠 TCE / Neuroproteção</span>
-          </button>
-
-          <button
-            onClick={() => toggleCondition('isHyperkalemiaRisk')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1 border transition-all ${
-              conditions.isHyperkalemiaRisk
-                ? 'bg-red-100 dark:bg-red-950/60 border-red-400 text-red-900 dark:text-red-200 shadow-sm'
-                : 'bg-slate-50 dark:bg-navy-900 border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-400'
-            }`}
-          >
-            <span>⚠️ Risco de Hipercalemia</span>
-          </button>
-        </div>
+        </details>
       </div>
 
-      {/* 3. AS 4 TRILHAS CLÍNICAS (Cards de Acesso Direto) */}
+      {/* 3. Trilhas — hierarquia calma */}
       <div>
-        <div className="flex items-center justify-between mb-2.5">
-          <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-            Acesso Direto às Trilhas Clínicas
+        <div className="flex items-baseline justify-between mb-3 px-1">
+          <h3 className="text-base font-extrabold text-slate-800 dark:text-slate-100">
+            Por onde começar
           </h3>
-          <span className="text-xs text-slate-400">Toque para abrir</span>
+          <span className="text-xs text-slate-500">Na dúvida, faça a triagem acima</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           
-          {/* Card 1: CRASH */}
-          <div
+          <button
             onClick={() => handleSelectTrack('CRASH')}
-            className="group p-4 bg-white dark:bg-navy-800 border-2 border-red-200 dark:border-red-900/50 hover:border-emergency rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition-all active:scale-[0.98]"
+            aria-label="Abrir trilha CRASH para parada ou peri-parada"
+            className="text-left p-5 bg-white dark:bg-navy-800 border-2 border-red-200 dark:border-red-900/50 hover:border-red-500 rounded-3xl shadow-sm hover:shadow-md transition-all active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-red-400 min-h-[88px]"
           >
-            <div className="flex items-start justify-between">
-              <div className="w-10 h-10 rounded-xl bg-red-100 dark:bg-red-950/80 text-emergency flex items-center justify-center font-black">
-                <Flame className="w-5 h-5" />
+            <div className="flex items-start justify-between gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-red-100 dark:bg-red-950/80 text-red-700 dark:text-red-300 flex items-center justify-center shrink-0">
+                <Flame className="w-5 h-5" aria-hidden="true" />
               </div>
-              <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-950 text-emergency">
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300">
                 Imediato
               </span>
             </div>
-            <h4 className="text-lg font-black text-slate-900 dark:text-white mt-3 group-hover:text-emergency transition-colors">
+            <span className="block text-lg font-extrabold text-slate-900 dark:text-white mt-3">
               CRASH
-            </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-snug">
-              Parada cardiorrespiratória (PCR), peri-parada ou coma profundo arreativo. Sem tempo para sequência medicamentosa.
-            </p>
-          </div>
+            </span>
+            <span className="block text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+              Parada, peri-parada ou coma arreativo. Laringoscopia imediata, sem sequência.
+            </span>
+          </button>
 
-          {/* Card 2: SRI */}
-          <div
+          <button
             onClick={() => handleSelectTrack('SRI')}
-            className="group p-4 bg-white dark:bg-navy-800 border-2 border-sky-200 dark:border-sky-900/50 hover:border-sky-500 rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition-all active:scale-[0.98]"
+            aria-label="Abrir trilha SRI sequência rápida"
+            className="text-left p-5 bg-navy-900 dark:bg-navy-800 border-2 border-navy-700 hover:border-sky-400 rounded-3xl shadow-md transition-all active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-sky-400 min-h-[88px]"
           >
-            <div className="flex items-start justify-between">
-              <div className="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-950/80 text-navy-600 dark:text-sky-400 flex items-center justify-center font-black">
-                <Shield className="w-5 h-5" />
+            <div className="flex items-start justify-between gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-sky-400/20 text-sky-300 flex items-center justify-center shrink-0">
+                <Shield className="w-5 h-5" aria-hidden="true" />
               </div>
-              <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300">
-                Padrão Ouro
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-sky-400/20 text-sky-200">
+                Caminho habitual
               </span>
             </div>
-            <h4 className="text-lg font-black text-slate-900 dark:text-white mt-3 group-hover:text-navy-600 dark:group-hover:text-sky-400 transition-colors">
-              SRI (Sequência Rápida)
-            </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-snug">
-              Controle clássico de emergência com risco de aspiração. Preparo dos 7 Ps, pré-oxigenação e paralisia com indução simultânea.
-            </p>
-          </div>
+            <span className="block text-lg font-extrabold text-white mt-3">
+              SRI · Sequência rápida
+            </span>
+            <span className="block text-sm text-sky-200/90 mt-1 leading-relaxed">
+              Controle clássico com 7 Ps, pré-oxigenação e indução simultânea.
+            </span>
+          </button>
 
-          {/* Card 3: DSI / KOBE */}
-          <div
+          <button
             onClick={() => handleSelectTrack('DSI')}
-            className="group p-4 bg-white dark:bg-navy-800 border-2 border-amber-200 dark:border-amber-900/50 hover:border-amber-500 rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition-all active:scale-[0.98]"
+            aria-label="Abrir trilha DSI KOBE para hipoxemia ou agitação"
+            className="text-left p-5 bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 hover:border-amber-400 rounded-3xl shadow-sm hover:shadow-md transition-all active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-amber-400 min-h-[88px]"
           >
-            <div className="flex items-start justify-between">
-              <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950/80 text-amber-600 flex items-center justify-center font-black">
-                <Wind className="w-5 h-5" />
+            <div className="flex items-start justify-between gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 flex items-center justify-center shrink-0">
+                <Wind className="w-5 h-5" aria-hidden="true" />
               </div>
-              <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300">
-                Hipoxemia / Agitação
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300">
+                Hipoxemia / agitação
               </span>
             </div>
-            <h4 className="text-lg font-black text-slate-900 dark:text-white mt-3 group-hover:text-amber-600 transition-colors">
+            <span className="block text-lg font-extrabold text-slate-900 dark:text-white mt-3">
               DSI / KOBE
-            </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-snug">
-              Sequência Atrasada. Paciente que não tolera pré-oxigenação ou VAD fisiológica. Sedação dissociativa com Cetamina preservando drive.
-            </p>
-          </div>
+            </span>
+            <span className="block text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+              Não tolera máscara. Cetamina dissociativa preservando a respiração.
+            </span>
+          </button>
 
-          {/* Card 4: AWAKE */}
-          <div
+          <button
             onClick={() => handleSelectTrack('AWAKE')}
-            className="group p-4 bg-white dark:bg-navy-800 border-2 border-teal-200 dark:border-teal-900/50 hover:border-teal-500 rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition-all active:scale-[0.98]"
+            aria-label="Abrir trilha Awake para via aérea difícil anatômica"
+            className="text-left p-5 bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 hover:border-teal-400 rounded-3xl shadow-sm hover:shadow-md transition-all active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-teal-400 min-h-[88px]"
           >
-            <div className="flex items-start justify-between">
-              <div className="w-10 h-10 rounded-xl bg-teal-100 dark:bg-teal-950/80 text-teal-600 flex items-center justify-center font-black">
-                <Eye className="w-5 h-5" />
+            <div className="flex items-start justify-between gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-teal-100 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 flex items-center justify-center shrink-0">
+                <Eye className="w-5 h-5" aria-hidden="true" />
               </div>
-              <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full bg-teal-100 dark:bg-teal-950 text-teal-700 dark:text-teal-300">
-                VAD Anatômica
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-teal-100 dark:bg-teal-950 text-teal-800 dark:text-teal-300">
+                Via aérea difícil
               </span>
             </div>
-            <h4 className="text-lg font-black text-slate-900 dark:text-white mt-3 group-hover:text-teal-600 transition-colors">
-              AWAKE (Intubação Acordado)
-            </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-snug">
-              Via aérea difícil anatômica crítica prevista. Topicalização da orofaringe, sedação mínima titulada e ventilação espontânea preservada.
-            </p>
-          </div>
+            <span className="block text-lg font-extrabold text-slate-900 dark:text-white mt-3">
+              Awake · Acordado
+            </span>
+            <span className="block text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+              Anatomia crítica prevista. Espontânea preservada, um passo de cada vez.
+            </span>
+          </button>
 
         </div>
       </div>
 
-      {/* 4. ATALHOS CLÍNICOS RÁPIDOS */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+      {/* 4. Ferramentas calmas */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
         
-        {/* LEMON */}
         <button
           onClick={() => setIsLemonModalOpen(true)}
-          className="p-3 bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 rounded-xl flex flex-col items-center justify-center text-center shadow-sm hover:border-sky-400 transition-colors active:scale-95"
+          aria-label="Abrir escore LEMON"
+          className="min-h-[64px] p-4 bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 rounded-2xl flex items-center space-x-3 text-left shadow-sm hover:border-sky-400 transition-colors active:scale-95 focus-visible:ring-2 focus-visible:ring-sky-400"
         >
-          <Stethoscope className="w-5 h-5 text-sky-500 mb-1" />
-          <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Escore LEMON</span>
-          <span className="text-[10px] text-slate-400">
-            {lemonScore > 0 ? `${lemonScore} pts marcados` : 'VAD Anatômica'}
+          <Stethoscope className="w-5 h-5 text-sky-500 shrink-0" aria-hidden="true" />
+          <span>
+            <span className="block text-sm font-bold text-slate-800 dark:text-slate-200">Escore LEMON</span>
+            <span className="block text-xs text-slate-500" aria-live="polite">
+              {lemonScore > 0 ? `${lemonScore} ponto(s) — toque para revisar` : 'Previsão de via difícil'}
+            </span>
           </span>
         </button>
 
-        {/* Push-Dose */}
         <button
           onClick={() => setIsPushDoseModalOpen(true)}
-          className="p-3 bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 rounded-xl flex flex-col items-center justify-center text-center shadow-sm hover:border-amber-400 transition-colors active:scale-95"
+          aria-label="Abrir guia push-dose de vasopressor"
+          className="min-h-[64px] p-4 bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 rounded-2xl flex items-center space-x-3 text-left shadow-sm hover:border-amber-400 transition-colors active:scale-95 focus-visible:ring-2 focus-visible:ring-amber-400"
         >
-          <Droplets className="w-5 h-5 text-amber-500 mb-1" />
-          <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Push-Dose Pressor</span>
-          <span className="text-[10px] text-slate-400">Noradrenalina Bolus</span>
+          <Droplets className="w-5 h-5 text-amber-500 shrink-0" aria-hidden="true" />
+          <span>
+            <span className="block text-sm font-bold text-slate-800 dark:text-slate-200">Push-dose</span>
+            <span className="block text-xs text-slate-500">Noradrenalina em bolus</span>
+          </span>
         </button>
 
-        {/* Checklist */}
         <button
           onClick={() => handleSelectTrack('SRI')}
-          className="p-3 bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 rounded-xl flex flex-col items-center justify-center text-center shadow-sm hover:border-navy-500 transition-colors active:scale-95"
+          aria-label="Abrir checklist 7 Ps"
+          className="min-h-[64px] p-4 bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 rounded-2xl flex items-center space-x-3 text-left shadow-sm hover:border-navy-500 transition-colors active:scale-95 focus-visible:ring-2 focus-visible:ring-sky-400"
         >
-          <CheckSquare className="w-5 h-5 text-navy-600 dark:text-sky-400 mb-1" />
-          <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Checklist 7 Ps</span>
-          <span className="text-[10px] text-slate-400">Preparo Completo</span>
+          <CheckSquare className="w-5 h-5 text-navy-600 dark:text-sky-400 shrink-0" aria-hidden="true" />
+          <span>
+            <span className="block text-sm font-bold text-slate-800 dark:text-slate-200">Checklist 7 Ps</span>
+            <span className="block text-xs text-slate-500">Preparo guiado e calmo</span>
+          </span>
         </button>
 
       </div>
 
-      {/* 5. Nota Acadêmica & Institucional */}
-      <div className="pt-2 text-center text-slate-400 text-[11px]">
+      <div className="pt-2 text-center text-slate-500 text-xs space-y-1">
+        <p className="font-medium">Funciona offline — pode instalar na tela inicial e usar na ambulância.</p>
         <p className="font-medium">Gui-Ar • Mestrado Profissional PRFUG / DMD / CCS / UEM</p>
-        <p className="text-[10px] mt-0.5">Pesquisador: Silvio F. Tolentino • Orientador: Prof. Dr. Sanderland J. T. Gurgel</p>
+        <p>Silvio F. Tolentino • Orient. Prof. Dr. Sanderland J. T. Gurgel</p>
       </div>
 
     </div>

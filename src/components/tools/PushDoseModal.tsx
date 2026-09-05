@@ -1,19 +1,29 @@
+import { useEffect } from 'react';
 import { X, Activity, Droplets, AlertTriangle } from 'lucide-react';
 import { useClinical } from '../../context/ClinicalContext';
 
 export function PushDoseModal() {
   const { isPushDoseModalOpen, setIsPushDoseModalOpen } = useClinical();
 
+  useEffect(() => {
+    if (!isPushDoseModalOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsPushDoseModalOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isPushDoseModalOpen, setIsPushDoseModalOpen]);
+
   if (!isPushDoseModalOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Guia push-dose">
       <div className="bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-700 rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
         
         {/* Header */}
         <div className="bg-amber-600 px-4 py-3 text-white flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Activity className="w-5 h-5 animate-pulse" />
+            <Activity className="w-5 h-5" />
             <div>
               <h2 className="font-bold text-base leading-tight">Vasopressor em Bolus (Push-Dose)</h2>
               <p className="text-xs text-amber-100 font-medium">Prevenção do Colapso Cardiovascular</p>
@@ -21,8 +31,8 @@ export function PushDoseModal() {
           </div>
           <button
             onClick={() => setIsPushDoseModalOpen(false)}
-            className="p-1 rounded-full hover:bg-amber-700 transition-colors"
-            aria-label="Fechar"
+            aria-label="Fechar guia push-dose"
+            className="min-w-[48px] min-h-[48px] p-2.5 rounded-2xl hover:bg-amber-700 transition-colors focus-visible:ring-2 focus-visible:ring-white"
           >
             <X className="w-5 h-5" />
           </button>
@@ -49,7 +59,7 @@ export function PushDoseModal() {
               <div className="p-2 bg-white dark:bg-navy-900 rounded-lg border border-slate-200 dark:border-navy-700">
                 <p className="font-semibold text-slate-900 dark:text-white">Como Diluir:</p>
                 <p>Aspirar <strong>1 mL da ampola de Noradrenalina</strong> (1 mg/mL) e injetar em um frasco ou bolsa de <strong>99 mL de SF 0,9%</strong>.</p>
-                <p className="text-[11px] text-sky-600 dark:text-sky-400 font-medium mt-0.5">
+                <p className="text-xs text-sky-600 dark:text-sky-400 font-medium mt-0.5">
                   ➔ Concentração final: 10 mcg/mL.
                 </p>
               </div>
@@ -57,7 +67,7 @@ export function PushDoseModal() {
               <div className="p-2 bg-white dark:bg-navy-900 rounded-lg border border-slate-200 dark:border-navy-700">
                 <p className="font-semibold text-slate-900 dark:text-white">Posologia na Emergência:</p>
                 <p>Injetar <strong>1 a 2 mL (10 a 20 mcg)</strong> em bolus IV a cada 2 a 5 minutos.</p>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Meta: PAS &gt; 90 mmHg / PAM &gt; 65 mmHg antes e durante a laringoscopia.
                 </p>
               </div>
@@ -79,12 +89,12 @@ export function PushDoseModal() {
         </div>
 
         {/* Footer */}
-        <div className="bg-slate-100 dark:bg-navy-800 px-4 py-2.5 flex justify-end border-t border-slate-200 dark:border-navy-700">
+        <div className="bg-slate-100 dark:bg-navy-800 px-4 py-3 flex justify-end border-t border-slate-200 dark:border-navy-700">
           <button
             onClick={() => setIsPushDoseModalOpen(false)}
-            className="px-4 py-1.5 bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold rounded-xl shadow-sm transition-colors"
+            className="min-h-[48px] px-5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-bold rounded-2xl shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-amber-400"
           >
-            Fechar Guia
+            Fechar guia
           </button>
         </div>
 

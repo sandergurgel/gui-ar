@@ -92,7 +92,14 @@ export function ClinicalProvider({ children }: { children: ReactNode }) {
     }
   });
 
-  const [activeTab, setActiveTabState] = useState<ActiveTab>('checklist');
+  const [activeTab, setActiveTabState] = useState<ActiveTab>(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_tab`);
+      return (saved as ActiveTab) || 'checklist';
+    } catch {
+      return 'checklist';
+    }
+  });
 
   const [checklistChecked, setChecklistChecked] = useState<Record<string, boolean>>(() => {
     try {
@@ -173,6 +180,9 @@ export function ClinicalProvider({ children }: { children: ReactNode }) {
 
   const setActiveTab = (tab: ActiveTab) => {
     setActiveTabState(tab);
+    try {
+      localStorage.setItem(`${STORAGE_KEY}_tab`, tab);
+    } catch {}
   };
 
   // Checklist
@@ -246,6 +256,7 @@ export function ClinicalProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem(`${STORAGE_KEY}_track`);
       localStorage.removeItem(`${STORAGE_KEY}_checklist`);
       localStorage.removeItem(`${STORAGE_KEY}_lemon`);
+      localStorage.removeItem(`${STORAGE_KEY}_tab`);
     } catch {}
   };
 

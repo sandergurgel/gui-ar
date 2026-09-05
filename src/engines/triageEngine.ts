@@ -4,7 +4,7 @@ export function runTriage(answers: TriageAnswers): TriageResult {
   let alert: string | undefined;
 
   if (answers.hasShockOrInstability) {
-    alert = '⚠️ ALERTA DE RESSUSCITAÇÃO FISIOLÓGICA: Alto risco de colapso cardiovascular peri-intubação! Realizar volume prévio e ter vasopressor em bolus (Noradrenalina push-dose 10-20 mcg) pronto antes de induzir. Reduzir dose do indutor.';
+    alert = 'Ressuscitação fisiológica: alto risco de colapso peri-intubação. Faça volume prévio e deixe vasopressor em bolus (Noradrenalina push-dose 10-20 mcg) pronto antes de induzir. Reduza a dose do indutor, um passo de cada vez.';
   }
 
   // 1. Crash condition

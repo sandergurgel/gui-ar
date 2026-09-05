@@ -15,7 +15,7 @@ export function ExecutionTab() {
             <span>Conduta de Execução — Via Aérea CRASH</span>
           </div>
           
-          <div className="space-y-2 text-xs text-slate-800 dark:text-slate-200">
+          <div className="space-y-2 text-sm text-slate-800 dark:text-slate-200">
             <div className="p-3 bg-white dark:bg-navy-900 rounded-xl border border-red-100 dark:border-red-900 space-y-1">
               <p className="font-bold text-slate-900 dark:text-white">1. Ação Imediata Sem Medicamentos</p>
               <p>Paciente arreativo / PCR. Iniciar laringoscopia direta ou videolaringoscopia imediatamente sem esperar medicações.</p>
@@ -41,7 +41,7 @@ export function ExecutionTab() {
             <span>Conduta de Execução — Sequência Rápida (SRI)</span>
           </div>
 
-          <div className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+          <div className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
             <div className="p-3 bg-white dark:bg-navy-900 rounded-xl border border-slate-200 dark:border-navy-700 space-y-1">
               <p className="font-bold text-slate-900 dark:text-white">Passo 1: Pré-Oxigenação Plena (3 a 5 minutos)</p>
               <p>Máscara com reservatório a 15 L/min. Meta: SpO2 &gt; 95% para maximizar o tempo de apneia segura.</p>
@@ -50,8 +50,9 @@ export function ExecutionTab() {
             <div className="p-3 bg-white dark:bg-navy-900 rounded-xl border border-slate-200 dark:border-navy-700 space-y-1">
               <p className="font-bold text-slate-900 dark:text-white">Passo 2: Indução + Bloqueio em Sequência Rápida</p>
               <p>Infundir o indutor (ex: Etomidato) em bólus rápido, seguido imediatamente do bloqueador (ex: Rocurônio 1,2 mg/kg ou Succinilcolina).</p>
-              <p className="text-amber-600 dark:text-amber-400 font-medium">
-                🛑 <strong>NÃO VENTILAR COM PRESSÃO POSITIVA (BVM)</strong> durante os 45-60s de latência, exceto se houver dessaturação crítica (SpO2 &lt; 90%).
+              <p className="text-amber-700 dark:text-amber-300 font-medium flex items-start gap-1.5">
+                <AlertOctagon className="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
+                <span>Evite ventilar com pressão positiva durante a latência de 45-60s, exceto se SpO2 &lt; 90%. Com calma, um passo de cada vez.</span>
               </p>
             </div>
 
@@ -70,7 +71,7 @@ export function ExecutionTab() {
             <span>Conduta de Execução — Sequência Atrasada (DSI / KOBE)</span>
           </div>
 
-          <div className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+          <div className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
             <div className="p-3 bg-white dark:bg-navy-900 rounded-xl border border-amber-200 dark:border-amber-800 space-y-1">
               <p className="font-bold text-slate-900 dark:text-white">Fase 1: Dissociação com Cetamina</p>
               <p>Infundir Cetamina 1,0 mg/kg IV lento (em 30-60 segundos). O paciente entrará em estado dissociativo (olhos abertos, nistagmo, respiração espontânea preservada).</p>
@@ -96,7 +97,7 @@ export function ExecutionTab() {
             <span>Conduta de Execução — Intubação Acordado (AWAKE)</span>
           </div>
 
-          <div className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+          <div className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
             <div className="p-3 bg-white dark:bg-navy-900 rounded-xl border border-teal-200 dark:border-teal-800 space-y-1">
               <p className="font-bold text-slate-900 dark:text-white">1. Topicalização e Explicação ao Paciente</p>
               <p>Explicar cada etapa ao paciente. Aplicar Lidocaína 10% spray na orofaringe e base da língua para abolir reflexo de vômito.</p>
@@ -116,23 +117,24 @@ export function ExecutionTab() {
       )}
 
       {/* EMERGENCY RESCUE BANNER */}
-      <div className="p-4 bg-red-50 dark:bg-red-950/40 border-2 border-emergency rounded-2xl text-red-900 dark:text-red-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
+      <div className="sticky top-16 z-10 p-4 bg-red-50 dark:bg-red-950/40 border-2 border-emergency rounded-2xl text-red-900 dark:text-red-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
         <div className="space-y-1">
-          <div className="flex items-center space-x-2 text-emergency font-black text-sm uppercase tracking-wide">
-            <AlertOctagon className="w-5 h-5" />
-            <span>Falha na Tentativa de Intubação?</span>
+          <div className="flex items-center space-x-2 text-emergency font-extrabold text-base uppercase tracking-wide">
+            <AlertOctagon className="w-5 h-5" aria-hidden="true" />
+            <span>Falhou? Não insista sozinho</span>
           </div>
-          <p className="text-xs text-slate-700 dark:text-slate-300">
-            Não insista em mais de 3 tentativas sem otimizar. Se não oxigenar, acione o resgate com Máscara Laríngea ou Via Aérea Cirúrgica.
+          <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+            Máximo 3 tentativas. Sem oxigenação, abra o resgate com máscara laríngea ou via cirúrgica.
           </p>
         </div>
 
         <button
           onClick={() => setIsSosModalOpen(true)}
-          className="w-full sm:w-auto px-4 py-2.5 bg-emergency hover:bg-red-700 text-white font-extrabold text-xs rounded-xl flex items-center justify-center space-x-1.5 shadow-sm active:scale-95 transition-all shrink-0"
+          aria-label="Abrir plano de resgate A a D"
+          className="w-full sm:w-auto min-h-[56px] px-5 py-3.5 bg-emergency hover:bg-red-700 text-white font-extrabold text-sm rounded-2xl flex items-center justify-center space-x-1.5 shadow-sm active:scale-95 transition-all shrink-0 focus-visible:ring-2 focus-visible:ring-white"
         >
-          <span>Abrir Plano de Resgate (Planos A a D)</span>
-          <ChevronRight className="w-4 h-4" />
+          <span>Abrir resgate (A a D)</span>
+          <ChevronRight className="w-5 h-5" aria-hidden="true" />
         </button>
       </div>
 

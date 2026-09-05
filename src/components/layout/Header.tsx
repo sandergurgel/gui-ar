@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { AlertTriangle, Moon, Sun, RotateCcw, ArrowLeft } from 'lucide-react';
 import { useClinical } from '../../context/ClinicalContext';
 
@@ -11,10 +12,21 @@ export function Header() {
     resetPatientSession
   } = useClinical();
 
+  const [armReset, setArmReset] = useState(false);
+
+  useEffect(() => {
+    if (!armReset) return;
+    const t = setTimeout(() => setArmReset(false), 4000);
+    return () => clearTimeout(t);
+  }, [armReset]);
+
   const handleReset = () => {
-    if (window.confirm('Deseja reiniciar a sessão do paciente e limpar todos os dados preenchidos?')) {
-      resetPatientSession();
+    if (!armReset) {
+      setArmReset(true);
+      return;
     }
+    setArmReset(false);
+    resetPatientSession();
   };
 
   return (
@@ -26,11 +38,11 @@ export function Header() {
           {currentTrack ? (
             <button
               onClick={() => setCurrentTrack(null)}
-              className="p-2 -ml-2 rounded-xl hover:bg-navy-500/50 transition-colors flex items-center space-x-1"
+              className="min-w-[48px] min-h-[48px] p-2.5 -ml-2 rounded-xl hover:bg-navy-500/50 transition-colors flex items-center space-x-1 focus-visible:ring-2 focus-visible:ring-sky-400"
               aria-label="Voltar para a tela inicial"
             >
               <ArrowLeft className="w-5 h-5 text-sky-300" />
-              <span className="text-xs font-semibold text-sky-200 hidden xs:inline">Início</span>
+              <span className="text-xs font-semibold text-sky-200 hidden sm:inline">Início</span>
             </button>
           ) : null}
 
@@ -42,11 +54,11 @@ export function Header() {
               <span className="text-xl sm:text-2xl font-black tracking-tight text-white">
                 Gui<span className="text-sky-400">-Ar</span>
               </span>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-sky-500/30 text-sky-300 border border-sky-400/30">
+              <span className="text-xs font-bold tracking-wide px-1.5 py-0.5 rounded bg-sky-500/30 text-sky-200 border border-sky-400/30">
                 mHealth
               </span>
             </div>
-            <span className="text-[10px] sm:text-xs text-slate-300 font-medium leading-none">
+            <span className="text-xs text-sky-200 font-medium leading-none">
               Apoio à Decisão em Via Aérea
             </span>
           </div>
@@ -58,11 +70,12 @@ export function Header() {
           {/* Reset Patient Data */}
           <button
             onClick={handleReset}
-            title="Reiniciar Paciente"
-            aria-label="Reiniciar atendimento"
-            className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-navy-500/50 transition-colors"
+            title={armReset ? 'Toque de novo para confirmar' : 'Reiniciar Paciente'}
+            aria-label={armReset ? 'Confirmar reinício do atendimento' : 'Reiniciar atendimento'}
+            aria-live="polite"
+            className={`min-w-[48px] min-h-[48px] p-2.5 rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-sky-400 ${armReset ? 'bg-red-600 text-white' : 'text-sky-200 hover:text-white hover:bg-navy-500/50'}`}
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="w-5 h-5" />
           </button>
 
           {/* Dark / Light mode toggle */}
@@ -70,18 +83,18 @@ export function Header() {
             onClick={toggleDarkMode}
             title={isDarkMode ? 'Mudar para Modo Claro' : 'Mudar para Modo Escuro'}
             aria-label="Alternar tema claro/escuro"
-            className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-navy-500/50 transition-colors"
+            className="min-w-[48px] min-h-[48px] p-2.5 rounded-xl text-sky-200 hover:text-white hover:bg-navy-500/50 transition-colors focus-visible:ring-2 focus-visible:ring-sky-400"
           >
-            {isDarkMode ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-sky-200" />}
+            {isDarkMode ? <Sun className="w-5 h-5 text-amber-300" /> : <Moon className="w-5 h-5 text-sky-200" />}
           </button>
 
           {/* Emergency SOS Button */}
           <button
             onClick={() => setIsSosModalOpen(true)}
             aria-label="Abrir plano de falha de emergência"
-            className="flex items-center space-x-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 bg-emergency hover:bg-red-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-red-900/40 active:scale-95 transition-all"
+            className="flex items-center space-x-1.5 min-h-[44px] px-4 py-2.5 bg-emergency hover:bg-red-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-red-900/40 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-white"
           >
-            <AlertTriangle className="w-4 h-4 animate-pulse" />
+            <AlertTriangle className="w-4 h-4" />
             <span className="tracking-wide uppercase">SOS Falha</span>
           </button>
 

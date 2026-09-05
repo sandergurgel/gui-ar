@@ -1,8 +1,18 @@
+import { useEffect } from 'react';
 import { X, Check, Stethoscope, AlertTriangle } from 'lucide-react';
 import { useClinical } from '../../context/ClinicalContext';
 
 export function LemonModal() {
   const { isLemonModalOpen, setIsLemonModalOpen, lemonState, toggleLemonItem, resetLemon, lemonScore } = useClinical();
+
+  useEffect(() => {
+    if (!isLemonModalOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsLemonModalOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isLemonModalOpen, setIsLemonModalOpen]);
 
   if (!isLemonModalOpen) return null;
 
@@ -54,8 +64,8 @@ export function LemonModal() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-700 rounded-2xl w-full max-w-lg max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Escore LEMON">
+      <div className="bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-700 rounded-3xl w-full max-w-lg max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
         
         {/* Header */}
         <div className="bg-navy-600 dark:bg-navy-950 px-4 py-3 text-white flex items-center justify-between border-b border-navy-500/30">
@@ -68,8 +78,8 @@ export function LemonModal() {
           </div>
           <button
             onClick={() => setIsLemonModalOpen(false)}
-            className="p-1 rounded-full hover:bg-navy-500/50 transition-colors"
-            aria-label="Fechar"
+            aria-label="Fechar escore LEMON"
+            className="min-w-[48px] min-h-[48px] p-2.5 rounded-2xl hover:bg-navy-700 transition-colors focus-visible:ring-2 focus-visible:ring-sky-400"
           >
             <X className="w-5 h-5" />
           </button>
@@ -97,35 +107,37 @@ export function LemonModal() {
           </p>
 
           {/* Criteria Checklist */}
-          <div className="space-y-2">
+          <div className="space-y-2.5" role="group" aria-label="Critérios LEMON">
             {criteria.map(item => {
               const checked = lemonState[item.key];
               return (
-                <div
+                <button
                   key={item.key}
                   onClick={() => toggleLemonItem(item.key)}
-                  className={`p-3 rounded-xl border cursor-pointer transition-all flex items-start space-x-3 select-none ${
+                  aria-pressed={checked}
+                  className={`w-full min-h-[64px] p-3.5 rounded-2xl border text-left transition-all flex items-start space-x-3 select-none focus-visible:ring-2 focus-visible:ring-sky-400 ${
                     checked
                       ? 'bg-sky-50/80 dark:bg-navy-800 border-sky-400 dark:border-sky-500 text-navy-900 dark:text-sky-100 shadow-sm'
                       : 'bg-slate-50 dark:bg-navy-800/40 border-slate-200 dark:border-navy-700/80 text-slate-700 dark:text-slate-300 hover:border-slate-300'
                   }`}
                 >
                   <div
-                    className={`w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 transition-colors ${
+                    className={`w-7 h-7 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 mt-0.5 transition-colors ${
                       checked
                         ? 'bg-sky-500 text-white'
                         : 'bg-slate-200 dark:bg-navy-700 text-slate-600 dark:text-slate-300'
                     }`}
+                    aria-hidden="true"
                   >
                     {checked ? <Check className="w-4 h-4" /> : item.letter}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-sm font-bold leading-tight">{item.name}</p>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                    <p className="text-sm font-bold leading-tight">{item.name}</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
                       {item.desc}
                     </p>
                   </div>
-                </div>
+                </button>
               );
             })}
           </div>
@@ -133,16 +145,16 @@ export function LemonModal() {
         </div>
 
         {/* Footer */}
-        <div className="bg-slate-100 dark:bg-navy-800 px-4 py-2.5 flex items-center justify-between border-t border-slate-200 dark:border-navy-700">
+        <div className="bg-slate-100 dark:bg-navy-800 px-4 py-3 flex items-center justify-between gap-2 border-t border-slate-200 dark:border-navy-700">
           <button
             onClick={resetLemon}
-            className="text-xs font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+            className="min-h-[48px] px-4 text-sm font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 rounded-xl focus-visible:ring-2 focus-visible:ring-sky-400"
           >
-            Limpar Escore
+            Limpar escore
           </button>
           <button
             onClick={() => setIsLemonModalOpen(false)}
-            className="px-4 py-1.5 bg-navy-600 hover:bg-navy-500 text-white text-xs font-bold rounded-xl shadow-sm transition-colors"
+            className="min-h-[48px] px-5 bg-navy-600 hover:bg-navy-500 text-white text-sm font-bold rounded-2xl shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-sky-400"
           >
             Concluir ({lemonScore} pts)
           </button>
